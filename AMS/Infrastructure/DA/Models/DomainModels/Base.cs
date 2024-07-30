@@ -12,7 +12,6 @@ namespace DA.Models.DomainModels
     public abstract class Base<T>
     {
         [Key]
-
         public virtual T Id { get; set; }
 
 
