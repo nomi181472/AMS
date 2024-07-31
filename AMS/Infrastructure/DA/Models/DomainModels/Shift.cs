@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DA.Entities
+namespace DA.Models.DomainModels
 {
-    public class Shift
+    internal class Shift : Base<string>
     {
-        public Guid Id { get; set; }
+
         public string? Description { get; set; }
         public Enum? Status { get; set; }
 

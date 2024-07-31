@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DA.Entities
+namespace DA.Models.DomainModels
 {
-    internal class Attendance
+    internal class Attendance: Base<string>
     {
     }
 }

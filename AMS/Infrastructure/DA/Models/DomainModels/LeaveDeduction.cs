@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DA.Entities
+namespace DA.Models.DomainModels
 {
-    public class LeaveDeduction
+    internal class LeaveDeduction : Base<string>
     {
-        public Guid Code { get; set; }
+        public string Code { get; set; }
         public string Description { get; set; }
         public bool Status { get; set; }
 

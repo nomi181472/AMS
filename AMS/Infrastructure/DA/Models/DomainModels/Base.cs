@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DA.Models.DomainModels
 {
-    public abstract class Base<T>
+    internal abstract class Base<T>
     {
         [Key]
         public virtual T Id { get; set; }

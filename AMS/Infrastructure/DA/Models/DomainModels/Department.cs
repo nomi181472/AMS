@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DA.Entities
+namespace DA.Models.DomainModels
 {
-    internal class Department
+    internal class Department : Base<string>
     {
     }
 }

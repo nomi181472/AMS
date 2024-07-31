@@ -4,9 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DA.Entities
+namespace DA.Models.DomainModels
 {
-    internal class Company
+    internal class Employee : Base<string>
     {
+
+
+
     }
 }

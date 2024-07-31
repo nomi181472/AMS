@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DA.Entities
+namespace DA.Models.DomainModels
 {
-    public class DeductionRule
+    internal class DeductionRule : Base<string>
     {
-        public Guid Code { get; set; }
+        public string Code { get; set; }
         public string Name { get; set; }
 
         public TimeOnly StartTime { get; set; }
