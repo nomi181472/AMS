@@ -457,6 +457,21 @@ namespace DA.Repositories.CommonRepositories
             }
         }
 
-       
+        public async Task<GetterResult<IEnumerable<TEntity>>> GetAllAsync( CancellationToken cancellationToken)
+        {
+            try
+            {
+                GetterResult<IEnumerable<TEntity>> getterResult = new GetterResult<IEnumerable<TEntity>>();
+                getterResult.Message = CommonMessages.Success;
+                getterResult.Status = true;
+                getterResult.Data = await _dbSet.ToListAsync(cancellationToken);
+                return getterResult;
+            }
+            catch (Exception e)
+            {
+
+                return new GetterResult<IEnumerable<TEntity>>() { Message = e.Message, Status = false };
+            }
+        }
     }
 }

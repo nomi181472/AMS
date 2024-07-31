@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace DA.Models.DomainModels
 {
-    internal class Allowance:Base<string>
+    public class Allowance:Base<string>
     {
+        public string Description { get; set; }
+        public string Tag { get; set; }
+        public string Type { get; set; }
     }
 }

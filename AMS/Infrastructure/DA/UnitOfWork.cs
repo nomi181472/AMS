@@ -2,6 +2,8 @@
 
 
 using DA.AppDbContexts;
+using DA.Models.DomainModels;
+using DA.Repositories.CommonRepositories;
 
 namespace DA
 {
@@ -14,7 +16,8 @@ namespace DA
             _db = db;
         }
 
-        
+        public IGenericRepository<Allowance, string> allowanceRepo => new GenericRepository<Allowance, string>(_db);
+
         public void Commit()
         {
             _db.SaveChanges();

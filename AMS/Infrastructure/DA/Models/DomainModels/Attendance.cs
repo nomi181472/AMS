@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DA.Models.DomainModels
 {
-    internal class Attendance: Base<string>
+    public class Attendance: Base<string>
     {
     }
 }

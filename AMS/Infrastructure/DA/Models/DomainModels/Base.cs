@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DA.Models.DomainModels
 {
-    internal abstract class Base<T>
+    public abstract class Base<T>
     {
         [Key]
         public virtual T Id { get; set; }
@@ -29,10 +29,10 @@ namespace DA.Models.DomainModels
 
         [Required(ErrorMessage = $"{nameof(UpdatedDate)} is required")]
         public virtual DateTime UpdatedDate { get; set; }
-/*        [Required(ErrorMessage = $"{nameof(IsActive)} is required")]
+        [Required(ErrorMessage = $"{nameof(IsActive)} is required")]
         public virtual bool IsActive { get; set; }
         [Required(ErrorMessage = $"{nameof(IsArchived)} is required")]
-        public virtual bool IsArchived { get; set; }*/
+        public virtual bool IsArchived { get; set; }
 
     }
 }

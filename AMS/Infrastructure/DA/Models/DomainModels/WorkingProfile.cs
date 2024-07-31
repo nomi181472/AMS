@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DA.Models.DomainModels
 {
-    internal class WorkingProfile : Base<string>
+    public class WorkingProfile : Base<string>
     {
     }
 }

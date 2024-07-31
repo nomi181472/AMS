@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace DA.Models.DomainModels
 {
-    internal class Shift : Base<string>
-    {
+    public class Shift : Base<string>
+    { 
 
         public string? Description { get; set; }
         public Enum? Status { get; set; }

@@ -27,6 +27,7 @@ namespace DA.Repositories.CommonRepositories
         SetterResult Delete(TEntity entity);
         SetterResult Delete(PrimitiveType id);
         GetterResult<TEntity> GetById(PrimitiveType id);
+        Task<GetterResult<IEnumerable<TEntity>>> GetAllAsync(CancellationToken cancellationToken);
         GetterResult<IEnumerable<TEntity>> GetAll();
         GetterResult<IEnumerable<TEntity>> Get(
              Expression<Func<TEntity, bool>> filter ,

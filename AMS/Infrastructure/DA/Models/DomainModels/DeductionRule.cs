@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DA.Models.DomainModels
 {
-    internal class DeductionRule : Base<string>
+    public class DeductionRule : Base<string>
     {
         public string Code { get; set; }
         public string Name { get; set; }
