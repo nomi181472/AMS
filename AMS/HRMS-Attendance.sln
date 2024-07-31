@@ -19,6 +19,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logger", "Utility\Logger\Lo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Helpers", "Utility\Helpers\Helpers.csproj", "{A9D8AFD6-43D2-4506-A64E-61CCF83F51B1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomHTTP", "Utility\CustomHTTP\CustomHTTP.csproj", "{053455BA-9CC2-4910-BC19-0A2245A0E8D2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{A9D8AFD6-43D2-4506-A64E-61CCF83F51B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A9D8AFD6-43D2-4506-A64E-61CCF83F51B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A9D8AFD6-43D2-4506-A64E-61CCF83F51B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{053455BA-9CC2-4910-BC19-0A2245A0E8D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{053455BA-9CC2-4910-BC19-0A2245A0E8D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{053455BA-9CC2-4910-BC19-0A2245A0E8D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{053455BA-9CC2-4910-BC19-0A2245A0E8D2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -55,6 +61,7 @@ Global
 		{22363650-11BA-4609-A879-E5752198D4F9} = {3E637804-C9C9-44C6-9C9F-78074FF64AF2}
 		{BE9104A2-B59B-4923-8D86-2C33E06915F7} = {4FDB30F3-FC0F-4A2E-B0EA-3052CF915808}
 		{A9D8AFD6-43D2-4506-A64E-61CCF83F51B1} = {4FDB30F3-FC0F-4A2E-B0EA-3052CF915808}
+		{053455BA-9CC2-4910-BC19-0A2245A0E8D2} = {4FDB30F3-FC0F-4A2E-B0EA-3052CF915808}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BB0F32EC-EE66-4564-9BE0-D1C3FFFB77FE}

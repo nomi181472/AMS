@@ -12,7 +12,7 @@ namespace Logger
     public static class SlackExceptionMethods
     {
         private static readonly string _webhookUrl = DependencyInjection.SlackWebhook;
-        private static string AppName="PaymentGatewayApi";
+        private static string AppName="HRMS-Attendance";
 
         public static async void AddException(Exception ex)
         {

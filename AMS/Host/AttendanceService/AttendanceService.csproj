@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Infrastructure\AttendanceServices\AttendanceServices.csproj" />
+    <ProjectReference Include="..\..\Utility\CustomHTTP\CustomHTTP.csproj" />
     <ProjectReference Include="..\..\Utility\Logger\Logger.csproj" />
   </ItemGroup>
 
