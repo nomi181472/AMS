@@ -16,8 +16,9 @@ namespace AttendanceServices.Services.AllowanceService.Models
             return new Allowance
             {
                 Description = request.Description,
-                Tag = request.Tag,
-                Type = request.Type,
+                Name = request.Name,
+                CompanyId = request.CompanyId,
+                Code = request.Code
             };
         }
         public static ResponseGetAllowanceWithDetails ToResponseWithDetails(this Allowance models)
@@ -25,14 +26,12 @@ namespace AttendanceServices.Services.AllowanceService.Models
             return new ResponseGetAllowanceWithDetails
             {
                 Description = models.Description,
-                Tag = models.Tag,
-                Type = models.Type,
                 CreatedBy=models.CreatedBy,
                 CreatedDate=models.CreatedDate,
                 IsActive=models.IsActive,
                 IsArchived=models.IsArchived,
                 UpdatedBy=models.UpdatedBy,
-                UpdatedDate=models.UpdatedDate,
+                UpdatedDate=models.UpdatedDate
                 
                 
             };

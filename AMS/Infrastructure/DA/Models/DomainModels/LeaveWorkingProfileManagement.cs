@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace DA.Models.DomainModels
 {
-    public class Deduction : Base<string>
+    public class LeaveWorkingProfileManagement : Base<string>
     {
-        public string Type { get; set; }
-        public string Description { get; set; }
+        public string LeaveId { get; set; }
+        public string WorkingProfileId { get; set; }
+
     }
 }
