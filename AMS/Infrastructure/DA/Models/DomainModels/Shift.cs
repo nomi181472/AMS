@@ -15,5 +15,7 @@ namespace DA.Models.DomainModels
         public int NumDays { get; set; }
         public DateTime? TimeIn { get; set; }
         public DateTime? TimeOut { get; set; }
+
+        public ICollection<ShiftDeductionScheduler> Schedulers { get; set; }
     }
 }

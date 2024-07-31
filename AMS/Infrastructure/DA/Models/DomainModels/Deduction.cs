@@ -8,7 +8,11 @@ namespace DA.Models.DomainModels
 {
     public class Deduction : Base<string>
     {
-        public string Type { get; set; }
+        public string Name { get; set; }
         public string Description { get; set; }
+        public string Type { get; set; }
+
+        public ICollection<ShiftDeductionScheduler> Schedulers { get; set; }
+
     }
 }

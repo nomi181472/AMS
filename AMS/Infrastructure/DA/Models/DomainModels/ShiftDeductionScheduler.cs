@@ -11,9 +11,12 @@ namespace DA.Models.DomainModels
         public string ShiftId { get; set; }
 
         public string DeductionId { get; set; }
+        public string WorkingProfileId { get; set; }
 
         public Shift Shift { get; set; }
 
         public Deduction Deduction { get; set; }
+
+        public WorkingProfile WorkingProfile { get; set; }
     }
 }

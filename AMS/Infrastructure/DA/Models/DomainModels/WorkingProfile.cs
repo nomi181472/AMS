@@ -17,5 +17,6 @@ namespace DA.Models.DomainModels
         public int WorkingDays { get; set; }
         public int WorkingHours { get; set; }
 
+        public ICollection<ShiftDeductionScheduler> Schedulers { get; set; }
     }
 }
