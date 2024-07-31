@@ -13,16 +13,39 @@ namespace DA
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddDataAccessServices(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddDALayer(this IServiceCollection services, IConfiguration configuration)
         {
 
 
-           
+
+            services
+                .AddDbContext(configuration)
+                .AddUOW();
+
+
+            return services;
+        }
+        public static IServiceCollection AddDbContext(this IServiceCollection services, IConfiguration configuration)
+        {
+
+
+
             services.AddDbContext<AppDbContext>(
 
                 options => options.UseNpgsql(configuration.GetSection("ConnectionStrings:db").Value)
                 );
+           
+
+
+            return services;
+        }
+        public static IServiceCollection AddUOW(this IServiceCollection services)
+        {
+
+
+
             services.TryAddScoped<IUnitOfWork, UnitOfWork>();
+
 
 
             return services;
