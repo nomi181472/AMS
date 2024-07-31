@@ -16,8 +16,6 @@ namespace DA
         public static IServiceCollection AddDataAccessServices(this IServiceCollection services, IConfiguration configuration)
         {
 
-
-           
             services.AddDbContext<AppDbContext>(
 
                 options => options.UseNpgsql(configuration.GetSection("ConnectionStrings:db").Value)
