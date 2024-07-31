@@ -12,9 +12,10 @@ namespace AttendanceServices.Services.AllowanceService.Models.Request
 {
     public class RequestAddAllowance
     {
+        public string Code { get; set; } = KConstantCommon.UseNA;
+        public string Name { get; set; } = KConstantCommon.UseNA;
         public string Description { get; set; } = KConstantCommon.UseNA;
-        public string Type { get; set; }= KConstantCommon.UseNA;
-        public string Tag { get; set; }= KConstantCommon.UseNA;
+        public int CompanyId { get; set; }
     }
     
 }
