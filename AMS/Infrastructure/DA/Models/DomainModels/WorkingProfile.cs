@@ -17,5 +17,10 @@ namespace DA.Models.DomainModels
         public int WorkingDays { get; set; }
         public int WorkingHours { get; set; }
 
+        public ICollection<AllowanceWorkingProfileManagement> AllowanceWorkingProfileManagements { get; set; } 
+        public ICollection<LeaveWorkingProfileManagement> LeaveWorkingProfileManagements { get;  set; }
+
+        public  virtual FiscalYear FiscalYear { get; set; }  
+
     }
 }
