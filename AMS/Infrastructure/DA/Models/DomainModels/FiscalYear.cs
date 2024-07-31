@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 
 namespace DA.Models.DomainModels
 {
-    public class Allowance:Base<string>
+    public class FiscalYear : Base<string>
     {
-        public string Code { get; set; }
         public string Name { get; set; }
-        public string Description { get; set; }
-        public int CompanyId { get; set; }
+        public string type { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+
 
     }
 }

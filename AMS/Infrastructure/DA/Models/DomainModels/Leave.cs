@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 
 namespace DA.Models.DomainModels
 {
-    public class LeaveDeduction : Base<string>
+    public class Leave : Base<string>
     {
         public string Code { get; set; }
+        public string Name { get; set; }
         public string Description { get; set; }
-        public bool Status { get; set; }
-
-
+        public int CompanyId { get; set; }
     }
 }
