@@ -12,6 +12,10 @@ namespace DA.AppDbContexts
     public class AppDbContext:DbContext
     {
         public DbSet<Allowance> Allowances { get; set; }
+        public DbSet<Shift> Shifts { get; set; }
+
+        public DbSet<Deduction> Deductions { get; set; }
+        public DbSet<ShiftDeductionScheduler> ShiftDeductionSchedulers { get; set; }
         public AppDbContext(DbContextOptions<AppDbContext> dbContextOptions) : base(dbContextOptions)
         {
 
@@ -19,11 +23,6 @@ namespace DA.AppDbContexts
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-
-
-
-
-
 
         }
     }
