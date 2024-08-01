@@ -72,17 +72,23 @@ namespace AttendanceServices.Services.LeaveService
         {
             var result = await _unit.leaveRepo.GetByIdAsync(leaveId, cancellationToken);
 
-            if (result.Status && result.Data != null)
+            if (result.Status )
             {
-                var leave = result.Data;
-                leave.IsActive = false;
-                leave.IsArchived = true;
-                leave.UpdatedBy = userId;
-                leave.UpdatedDate = DateTime.Now;
+                if (result.Data != null)
+                {
+                    var leave = result.Data;
+                    leave.IsActive = false;
+                    leave.IsArchived = true;
+                    leave.UpdatedBy = userId;
+                    leave.UpdatedDate = DateTime.Now;
 
-                await _unit.leaveRepo.UpdateAsync(leave, userId, cancellationToken);
-                await _unit.CommitAsync(cancellationToken);
-                return true;
+                    await _unit.leaveRepo.UpdateAsync(leave, userId, cancellationToken);
+                    await _unit.CommitAsync(cancellationToken);
+                    return true;
+                }else
+                {
+                    throw new RecordNotFoundException("leave Id not found.");
+                }
             }
             else
             {

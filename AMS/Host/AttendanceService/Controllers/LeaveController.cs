@@ -1,4 +1,5 @@
 ﻿using AttendanceService.Common;
+using AttendanceServices.CustomExceptions.Common;
 using AttendanceServices.Services.LeaveService;
 using AttendanceServices.Services.LeaveService.Models.Request;
 using Logger;
@@ -114,7 +115,13 @@ namespace AttendanceService.Controllers
 
                 return ApiResponseHelper.Convert(true, true, message, statusCode, result);
             }
-
+            catch (RecordNotFoundException ex)
+            {
+                statusCode = HTTPStatusCode400.NotFound;//.InternalServerError;
+                message = ex.Message;
+              
+                return ApiResponseHelper.Convert(true, false, message, statusCode, null);
+            }
             catch (Exception e)
             {
                 statusCode = HTTPStatusCode500.InternalServerError;
