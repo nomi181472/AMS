@@ -43,8 +43,19 @@ namespace AttendanceServices.Services.WorkingProfileService
             {
                 throw new Exception("Working profile you are trying to update does not exist.");
             }
-            workingProfile = _mapper.Map<UpdateWorkingProfileRequest, WorkingProfile>(request);
+            if (string.IsNullOrWhiteSpace(request.Code))
+            {
+                throw new Exception("Invalid working profile code");
+            }
+            workingProfile.Code = request.Code;
+            workingProfile.GraceTimeOut = request.GraceTimeOut ?? 0;
+            workingProfile.GraceTimeIn = request.GraceTimeIn ?? 0;
+            workingProfile.WorkingDays = request.WorkingDays ?? 0;
+            workingProfile.WorkingHours = request.WorkingHours ?? 0;
+            workingProfile.Description = request.Description;
+            workingProfile.FiscalYearId = request.FiscalYearId;
             var result = await _unitOfWork.workingProfileRepo.UpdateAsync(workingProfile, userId, cancellationToken);
+            await _unitOfWork.CommitAsync(cancellationToken);
             return result.Result;
         }
 
@@ -55,7 +66,10 @@ namespace AttendanceServices.Services.WorkingProfileService
             {
                 throw new Exception("Working profile you are trying to delete does not exist.");
             }
-            var result = await _unitOfWork.workingProfileRepo.DeleteAsync(Id, cancellationToken);
+            workingProfile.IsActive = false;
+            workingProfile.IsArchived = true;
+            var result = await _unitOfWork.workingProfileRepo.UpdateAsync(workingProfile, UserId, cancellationToken);
+            await _unitOfWork.CommitAsync(cancellationToken);
             return result.Result; 
         }
 
