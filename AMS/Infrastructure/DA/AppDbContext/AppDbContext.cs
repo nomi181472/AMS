@@ -27,32 +27,45 @@ namespace DA.AppDbContexts
         {
 
         }
+        public override int SaveChanges()
+        {
+            ConvertDateTimesToUtc();
+            return base.SaveChanges();
+        }
+
+        private void ConvertDateTimesToUtc()
+        {
+            var entities = ChangeTracker.Entries()
+                .Where(e => e.State == EntityState.Added || e.State == EntityState.Modified)
+                .Select(e => e.Entity);
+
+            foreach (var entity in entities)
+            {
+                var properties = entity.GetType().GetProperties()
+                    .Where(p => p.PropertyType == typeof(DateTime) || p.PropertyType == typeof(DateTime?));
+
+                foreach (var property in properties)
+                {
+                    if (property.GetValue(entity) is DateTime dateTime)
+                    {
+                        property.SetValue(entity, dateTime.ToUniversalTime());
+                    }
+
+                }
+            }
+        }
+
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            ConvertDateTimesToUtc();
+            return await base.SaveChangesAsync(cancellationToken);
+        }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
             builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-
-
-         
-
             
-
-
-
-            builder.Entity<ShiftDeductionScheduler>(entity =>
-            {
-                entity.HasOne(x => x.Shift).WithMany(x => x.Schedulers).HasForeignKey(x => x.ShiftId);
-                entity.HasOne(x => x.Deduction).WithMany(x => x.Schedulers).HasForeignKey(x => x.DeductionId);
-                entity.HasOne(x => x.WorkingProfile).WithMany(x => x.Schedulers).HasForeignKey(x => x.WorkingProfileId);
-            });
-
-            builder.Entity<Shift>(entity =>
-            {
-            });
-
-            builder.Entity<Deduction>(entity =>
-            {
-            });
         }
     }
 }

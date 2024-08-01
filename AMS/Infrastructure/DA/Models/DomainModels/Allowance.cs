@@ -11,9 +11,9 @@ namespace DA.Models.DomainModels
         public string Code { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public int CompanyId { get; set; }
+        public  int CompanyId { get; set; }
 
-        public ICollection<AllowanceWorkingProfileManagement> AllowanceWorkingProfileManagements {  get; set; } 
+        public virtual  ICollection<AllowanceWorkingProfileManagement> AllowanceWorkingProfileManagements {  get; set; } =new List<AllowanceWorkingProfileManagement>();
 
     }
 }

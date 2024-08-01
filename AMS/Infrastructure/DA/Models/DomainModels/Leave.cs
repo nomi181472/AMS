@@ -11,8 +11,8 @@ namespace DA.Models.DomainModels
         public string Code { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public int CompanyId { get; set; }
+        public virtual int? CompanyId { get; set; }
 
-        public ICollection<LeaveWorkingProfileManagement> LeaveWorkingProfileManagements { get; set; }
+        public virtual ICollection<LeaveWorkingProfileManagement> LeaveWorkingProfileManagements { get; set; } = new List<LeaveWorkingProfileManagement>();
     }
 }
