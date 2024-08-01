@@ -8,11 +8,13 @@ namespace DA.Models.DomainModels
 {
     public class LeaveWorkingProfileManagement : Base<string>
     {
-        public string LeaveId { get; set; }
-        public string WorkingProfileId { get; set; }
 
-        public virtual Leave Leave { get; set; }
-        public virtual WorkingProfile WorkingProfile { get; set; }
+        //fk
+        public  virtual string? LeaveId { get; set; }
+        public virtual string? WorkingProfileId { get; set; }
+
+        public  Leave? Leave { get; set; }
+        public  WorkingProfile? WorkingProfile { get; set; }
 
     }
 }

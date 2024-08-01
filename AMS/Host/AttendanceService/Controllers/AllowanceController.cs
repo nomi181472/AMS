@@ -33,10 +33,10 @@ namespace AttendanceService.Controllers
         {
             int statusCode = HTTPStatusCode200.Ok;
             string message = "Success";
-
+            
             try
             {
-                string userId ="anyIdfornow";
+                string userId ="anyIdfornow";// jwt context.User
                 var result = await _allowanceService.AddAllowance(request, userId, cancellationToken);
 
                 return ApiResponseHelper.Convert(true, true, message, statusCode, result);

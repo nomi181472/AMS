@@ -13,10 +13,19 @@ namespace DA.Models.DomainModelsConfigurations
     {
         public void Configure(EntityTypeBuilder<WorkingProfile> builder)
         {
-            builder
-                .HasOne<FiscalYear>()
-                .WithMany()
-                .HasForeignKey(wp => wp.FiscalYearId);
+            builder.HasMany(x => x.LeaveWorkingProfileManagements)
+                .WithOne(x=>x.WorkingProfile)
+                .HasForeignKey(x=>x.WorkingProfileId);
+
+
+            builder.HasMany(x => x.AllowanceWorkingProfileManagements)
+               .WithOne(x => x.WorkingProfile)
+               .HasForeignKey(x => x.WorkingProfileId);
+
+            builder.HasMany(x => x.ShiftDeductionScheduler)
+                .WithOne(x => x.WorkingProfile)
+                .HasForeignKey(x => x.WorkingProfileId);
+
         }
     }
 }

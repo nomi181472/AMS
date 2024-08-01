@@ -8,12 +8,13 @@ namespace DA.Models.DomainModels
 {
     public class AllowanceWorkingProfileManagement : Base<string>
     {
-        public string AllownaceId { get; set; }
-        public string WorkingProfileId { get; set; }
+        //fk
+        public virtual string? AllownaceId { get; set; }
+        public virtual string? WorkingProfileId { get; set; }
 
-        public virtual Allowance Allowance { get; set; }
+        public virtual Allowance? Allowance { get; set; }
 
-        public virtual WorkingProfile WorkingProfile { get; set; }
+        public virtual WorkingProfile? WorkingProfile { get; set; }
 
     }
 }

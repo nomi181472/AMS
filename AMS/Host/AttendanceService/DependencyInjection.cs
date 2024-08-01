@@ -8,7 +8,7 @@ namespace AttendanceService
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection CompleteDIs( this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddCompleteDIs( this IServiceCollection services, IConfiguration configuration)
         {
             services
                 .AddControllersDI()

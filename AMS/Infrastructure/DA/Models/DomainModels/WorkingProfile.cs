@@ -10,18 +10,23 @@ namespace DA.Models.DomainModels
     {
         public string Code { get; set; }
         public string Description { get; set; }
-        public int EmployeeId { get; set; }
-        public virtual string FiscalYearId { get; set; }
+       
         public int GraceTimeIn { get; set; }
         public int GraceTimeOut { get; set; }
         public int WorkingDays { get; set; }
         public int WorkingHours { get; set; }
 
-        public ICollection<AllowanceWorkingProfileManagement> AllowanceWorkingProfileManagements { get; set; } 
-        public ICollection<LeaveWorkingProfileManagement> LeaveWorkingProfileManagements { get;  set; }
+        //fk
+        
+        
 
-        public  virtual FiscalYear FiscalYear { get; set; }  
+        public virtual  ICollection<AllowanceWorkingProfileManagement> AllowanceWorkingProfileManagements { get; set; } =new List<AllowanceWorkingProfileManagement>();
+        public virtual  ICollection<LeaveWorkingProfileManagement> LeaveWorkingProfileManagements { get;  set; }=new 
+            List<LeaveWorkingProfileManagement>();
 
-        public ICollection<ShiftDeductionScheduler> Schedulers { get; set; }
+        public virtual string? FiscalYearId { get; set; }
+        public virtual FiscalYear? FiscalYear { get; set; }
+
+        public virtual ICollection<ShiftDeductionScheduler> ShiftDeductionScheduler { get; set; } = new List<ShiftDeductionScheduler>();
     }
 }

@@ -16,6 +16,6 @@ namespace DA.Models.DomainModels
         public DateTime? TimeIn { get; set; }
         public DateTime? TimeOut { get; set; }
 
-        public ICollection<ShiftDeductionScheduler> Schedulers { get; set; }
+        public virtual ICollection<ShiftDeductionScheduler> ShiftDeductionScheduler { get; set; }= new List<ShiftDeductionScheduler>(); 
     }
 }

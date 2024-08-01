@@ -8,15 +8,15 @@ namespace DA.Models.DomainModels
 {
     public class ShiftDeductionScheduler : Base<string>
     {
-        public string ShiftId { get; set; }
+        public virtual string? ShiftId { get; set; }
 
-        public string DeductionId { get; set; }
-        public string WorkingProfileId { get; set; }
+        public virtual string? DeductionId { get; set; }
+        public virtual string? WorkingProfileId { get; set; }
 
-        public Shift Shift { get; set; }
+        public virtual Shift? Shift { get; set; }
 
-        public Deduction Deduction { get; set; }
+        public virtual Deduction? Deduction { get; set; }
 
-        public WorkingProfile WorkingProfile { get; set; }
+        public WorkingProfile? WorkingProfile { get; set; }
     }
 }

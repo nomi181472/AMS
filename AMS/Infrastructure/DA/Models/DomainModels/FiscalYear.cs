@@ -12,6 +12,8 @@ namespace DA.Models.DomainModels
         public string type { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
+        public virtual ICollection<WorkingProfile> WorkingProfiles { get; set; }=new 
+            List<WorkingProfile>();
 
 
     }
