@@ -1,0 +1,2 @@
+2024-08-01 06:48:32.944 -07:00 [ERR] 28P01: password authentication failed for user "postgres"
+2024-08-01 06:50:39.775 -07:00 [ERR] 28P01: password authentication failed for user "postgres"
