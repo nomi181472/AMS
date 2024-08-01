@@ -18,6 +18,8 @@ namespace DA
 
         public IGenericRepository<Allowance, string> allowanceRepo => new GenericRepository<Allowance, string>(_db);
 
+        public IGenericRepository<Shift, string> shiftRepo => new GenericRepository<Shift, string>(_db);
+
         public void Commit()
         {
             _db.SaveChanges();

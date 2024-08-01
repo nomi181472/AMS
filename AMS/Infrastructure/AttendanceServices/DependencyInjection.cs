@@ -1,5 +1,6 @@
 ﻿
 using AttendanceServices.Services.AllowanceService;
+using AttendanceServices.Services.ShiftManagementService.Models;
 using DA;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,6 +27,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
        
 
         services.TryAddScoped<IAllowanceService, AllowanceService>();
+        services.TryAddScoped<IShiftService, ShiftService>();
        
         
 
