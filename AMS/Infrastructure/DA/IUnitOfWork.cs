@@ -12,6 +12,8 @@ namespace DA
     public interface IUnitOfWork
     {
         IGenericRepository<Allowance, string> allowanceRepo { get;  }
+
+        IGenericRepository<Leave, string> leaveRepo { get; }
         void Commit();
         Task CommitAsync(CancellationToken cancellationToken);
         Task CommitAsync();
