@@ -20,7 +20,7 @@ namespace AttendanceServices.Services.AllowanceService
         }
         public async Task<bool> AddAllowance(RequestAddAllowance request, string userId, CancellationToken cancellationToken)
         {
-            var entity= request.ToDomain();
+            var entity= request.ToDomain();     
             entity.UpdatedBy = userId;
             entity.CreatedDate= DateTime.Now;
             entity.UpdatedDate= DateTime.Now;
