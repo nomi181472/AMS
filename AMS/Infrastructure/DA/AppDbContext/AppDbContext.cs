@@ -32,27 +32,6 @@ namespace DA.AppDbContexts
             base.OnModelCreating(builder);
             builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
-
-         
-
-            
-
-
-
-            builder.Entity<ShiftDeductionScheduler>(entity =>
-            {
-                entity.HasOne(x => x.Shift).WithMany(x => x.Schedulers).HasForeignKey(x => x.ShiftId);
-                entity.HasOne(x => x.Deduction).WithMany(x => x.Schedulers).HasForeignKey(x => x.DeductionId);
-                entity.HasOne(x => x.WorkingProfile).WithMany(x => x.Schedulers).HasForeignKey(x => x.WorkingProfileId);
-            });
-
-            builder.Entity<Shift>(entity =>
-            {
-            });
-
-            builder.Entity<Deduction>(entity =>
-            {
-            });
         }
     }
 }
