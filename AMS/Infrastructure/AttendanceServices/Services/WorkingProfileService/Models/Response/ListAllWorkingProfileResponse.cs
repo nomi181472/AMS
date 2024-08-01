@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AttendanceServices.Services.WorkingProfileService.Models.Request
+namespace AttendanceServices.Services.WorkingProfileService.Models.Response
 {
-    public class CreateWorkingProfileRequest
+    public class ListAllWorkingProfileResponse
     {
+        public virtual string? Id { get; set; }
         public virtual string? Code { get; set; }
         public virtual string? Description { get; set; }
         public virtual int? GraceTimeIn { get; set; }
