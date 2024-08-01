@@ -18,6 +18,8 @@ namespace DA
 
         public IGenericRepository<Allowance, string> allowanceRepo => new GenericRepository<Allowance, string>(_db);
 
+        public IGenericRepository<WorkingProfile, string> workingProfileRepo => new GenericRepository<WorkingProfile, string>(_db);
+
         public void Commit()
         {
             _db.SaveChanges();

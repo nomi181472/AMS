@@ -1,5 +1,6 @@
 ﻿using AttendanceServices.Services.AllowanceService.Models.Request;
 using AttendanceServices.Services.WorkingProfileService.Models.Request;
+using AttendanceServices.Services.WorkingProfileService.Models.Response;
 using DA.Models.DomainModels;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,6 @@ namespace AttendanceServices.Services.WorkingProfileService
         Task<bool> AddWorkingProfile(CreateWorkingProfileRequest request, string userId, CancellationToken cancellationToken);
         Task<bool> UpdateWorkingProfile(UpdateWorkingProfileRequest request, string UserId, CancellationToken cancellationToken);
         Task<bool> DeleteWorkingProfileById(string Id, string UserId, CancellationToken cancellationToken);
-        Task<List<WorkingProfile>> ListAllWorkingProfiles(string UserId, CancellationToken cancellationToken);
+        Task<List<ListAllWorkingProfileResponse>> ListAllWorkingProfiles(string UserId, CancellationToken cancellationToken);
     }
 }
