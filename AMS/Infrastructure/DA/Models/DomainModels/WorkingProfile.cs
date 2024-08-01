@@ -11,11 +11,16 @@ namespace DA.Models.DomainModels
         public string Code { get; set; }
         public string Description { get; set; }
         public int EmployeeId { get; set; }
-        public string FiscalYearId { get; set; }
+        public virtual string FiscalYearId { get; set; }
         public int GraceTimeIn { get; set; }
         public int GraceTimeOut { get; set; }
         public int WorkingDays { get; set; }
         public int WorkingHours { get; set; }
+
+        public ICollection<AllowanceWorkingProfileManagement> AllowanceWorkingProfileManagements { get; set; } 
+        public ICollection<LeaveWorkingProfileManagement> LeaveWorkingProfileManagements { get;  set; }
+
+        public  virtual FiscalYear FiscalYear { get; set; }  
 
         public ICollection<ShiftDeductionScheduler> Schedulers { get; set; }
     }

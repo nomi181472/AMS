@@ -13,5 +13,7 @@ namespace DA.Models.DomainModels
         public string Description { get; set; }
         public int CompanyId { get; set; }
 
+        public ICollection<AllowanceWorkingProfileManagement> AllowanceWorkingProfileManagements {  get; set; } 
+
     }
 }

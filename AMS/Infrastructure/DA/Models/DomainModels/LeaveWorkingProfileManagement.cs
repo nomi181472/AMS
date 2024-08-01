@@ -11,5 +11,8 @@ namespace DA.Models.DomainModels
         public string LeaveId { get; set; }
         public string WorkingProfileId { get; set; }
 
+        public virtual Leave Leave { get; set; }
+        public virtual WorkingProfile WorkingProfile { get; set; }
+
     }
 }

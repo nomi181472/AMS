@@ -11,5 +11,9 @@ namespace DA.Models.DomainModels
         public string AllownaceId { get; set; }
         public string WorkingProfileId { get; set; }
 
+        public virtual Allowance Allowance { get; set; }
+
+        public virtual WorkingProfile WorkingProfile { get; set; }
+
     }
 }
