@@ -12,7 +12,7 @@ namespace AttendanceServices.CommonModels.Responses
         
 
 
-       
+ 
         public  string CreatedBy { get; set; }
 
 
