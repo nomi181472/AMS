@@ -10,4 +10,8 @@
     <ProjectReference Include="..\DA\DA.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Services\WorkingProfileService\Models\Response\" />
+  </ItemGroup>
+
 </Project>
