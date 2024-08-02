@@ -11,6 +11,8 @@ using AttendanceServices.Services.ShiftManagementService.Models.Response;
 using AttendanceServices.Services.AllowanceService.Models.Response;
 using AttendanceServices.Services.AllowanceService.Models;
 using AttendanceServices.EnumsAndConstants.Constant;
+using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace AttendanceServices.Services.ShiftManagementService.Models
 {
@@ -64,46 +66,40 @@ namespace AttendanceServices.Services.ShiftManagementService.Models
 
         public async Task<List<ResponseGetShiftUpdated>> UpdateShift(RequestUpdateShift request, string userId, CancellationToken cancellationToken)
         {
-            /*var existingShiftResult = await _unit.shiftRepo.GetSingleAsync(
-                cancellationToken,
-                x => x.Code == request.Code
-            );
-
-            if (!existingShiftResult.Status || existingShiftResult.Data == null)
+            if (request == null)
             {
-                throw new UnknownException($"Shift with code {request.Code} not found.");
+                throw new UnknownException("Request is null");
             }
 
-            var existingShift = existingShiftResult.Data;
+            if (userId == null)
+            {
+                throw new UnknownException("UserId is null");
+            }
 
-            existingShift.Description = request.Description != KConstantCommon.UseNA ? request.Description : existingShift.Description;
-           */
-            //existingShift.NumDays = request.NumDays != 0 ? request.NumDays : existingShift.NumDays;
-            //existingShift.TimeIn = request.TimeIn != DateTime.MinValue ? request.TimeIn : existingShift.TimeIn;
-            //existingShift.TimeOut = request.TimeOut != DateTime.MinValue ? request.TimeOut : existingShift.TimeOut;
-            //existingShift.UpdatedBy = userId;
-            //existingShift.UpdatedDate = DateTime.Now;
             var status = request.Status ?? KConstantCommon.UseNA;
             var result=await _unit.shiftRepo.UpdateOnConditionAsync(
-                x=>x.IsActive==true&&x.Code==request.Code,///matching condition
+                // 1st param: matching condition
+                x => x.IsActive==true&&x.Code==request.Code,
+                // 2nd param: set the updated value
                 x=>x.SetProperty(x=>x.Description, request.Description ?? KConstantCommon.UseNA)
                 .SetProperty(x=>x.Status,status)
                 .SetProperty(x=>x.UpdatedBy,userId)
-                .SetProperty(x=>x.UpdatedDate, DateTime.Now) //second parameter, what value need to be change it will be chain call
+                .SetProperty(x=>x.UpdatedDate, DateTime.Now)
                 , cancellationToken
-                );
-        
+            );
+
+            if (result == null)
+            {
+                throw new UnknownException(result.Message);
+            }
+
+            await _unit.CommitAsync(cancellationToken);
 
             var response = new List<ResponseGetShiftUpdated>
             {
                 new ResponseGetShiftUpdated
                 {
-                  //  Code = existingShift.Code,
-                   // Description = existingShift.Description,
-                   // Status = existingShift.Status,
-                   // NumDays = existingShift.NumDays,
-                    //TimeIn = existingShift.TimeIn,
-                   // TimeOut = existingShift.TimeOut
+                    // response is always left bool
                 }}
             ;
 
@@ -117,22 +113,29 @@ namespace AttendanceServices.Services.ShiftManagementService.Models
 
         public async Task<List<ResponseGetShiftDeleted>> DeleteShift(RequestDeleteShift request, string userId, CancellationToken cancellationToken)
         {
-            var existingShiftResult = await _unit.shiftRepo.GetSingleAsync(
-                cancellationToken,
-                x => x.Code == request.Code
-            );
-
-            if (!existingShiftResult.Status || existingShiftResult.Data == null)
+            if (request.Code == null)
             {
-                throw new UnknownException($"Shift with code {request.Code} not found.");
+                throw new UnknownException("Request is null");
+            };
+
+            Expression<Func<Shift, bool>> filter = shift => shift.Code == request.Code && shift.IsActive == true;
+            var getterResult = await _unit.shiftRepo.GetSingleAsync(cancellationToken, filter);
+
+            if (!getterResult.Status || getterResult.Data == null)
+            {
+                throw new UnknownException("Shift not found or error retrieving shift.");
             }
 
-            var existingShift = existingShiftResult.Data;
+            Shift shiftToDelete = getterResult.Data;
+            var setterResult = await _unit.shiftRepo.UpdateOnConditionAsync(
+                x => x.IsActive == true && x.Code == request.Code,
+                x => x.SetProperty(shiftToDelete => shiftToDelete.IsActive, false),
+                cancellationToken
+            );
 
-            var deleteResult = await _unit.shiftRepo.DeleteAsync(existingShift, cancellationToken);
-            if (!deleteResult.Result)
+            if (setterResult == null)
             {
-                throw new UnknownException("Failed to delete the shift. Please try again.");
+                throw new UnknownException(setterResult.Message);
             }
 
             await _unit.CommitAsync(cancellationToken);
@@ -141,14 +144,9 @@ namespace AttendanceServices.Services.ShiftManagementService.Models
             {
                 new ResponseGetShiftDeleted
                 {
-                    Code = existingShift.Code,
-                    Description = existingShift.Description,
-                    Status = existingShift.Status,
-                    NumDays = existingShift.NumDays,
-                    TimeIn = existingShift.TimeIn,
-                    TimeOut = existingShift.TimeOut
-                }
-            };
+
+                }}
+            ;
 
             if (response == null || !response.Any())
             {

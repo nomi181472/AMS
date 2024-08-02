@@ -9,16 +9,7 @@ namespace AttendanceServices.Services.ShiftManagementService.Models.Request
 {
     public class RequestDeleteShift
     {
-        public string Code { get; set; } = KConstantCommon.UseNA;
+        public string Code { get; set; }
 
-        public string Description { get; set; } = KConstantCommon.UseNA;
-
-        public string Status { get; set; } = KConstantCommon.UseNA;
-
-        public int NumDays { get; set; } = 0;
-
-        public DateTime TimeIn = DateTime.MinValue;
-
-        public DateTime TimeOut = DateTime.MinValue;
     }
 }
