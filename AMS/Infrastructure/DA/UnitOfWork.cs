@@ -18,6 +18,10 @@ namespace DA
 
         public IGenericRepository<Allowance, string> allowanceRepo => new GenericRepository<Allowance, string>(_db);
 
+        public IGenericRepository<WorkingProfile, string> workingProfileRepo => new GenericRepository<WorkingProfile, string>(_db);
+
+        public IGenericRepository<Leave, string> leaveRepo => new GenericRepository<Leave,string>(_db);
+
         public IGenericRepository<Shift, string> shiftRepo => new GenericRepository<Shift, string>(_db);
 
         public void Commit()

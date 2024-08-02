@@ -1,6 +1,7 @@
 ﻿
 using AttendanceServices.Services.AllowanceService;
 using AttendanceServices.Services.ShiftManagementService.Models;
+using AttendanceServices.Services.WorkingProfileService;
 using DA;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,8 +29,9 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 
         services.TryAddScoped<IAllowanceService, AllowanceService>();
         services.TryAddScoped<IShiftService, ShiftService>();
-       
-        
+        services.TryAddTransient<IWorkingProfileService, WorkingProfileService>();
+
+
 
 
 
