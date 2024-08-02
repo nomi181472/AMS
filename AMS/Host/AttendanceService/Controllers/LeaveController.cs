@@ -1,4 +1,5 @@
-﻿using AttendanceService.Common;
+﻿
+using AttendanceService.Common;
 using AttendanceServices.CustomExceptions.Common;
 using AttendanceServices.Services.LeaveService;
 using AttendanceServices.Services.LeaveService.Models.Request;
@@ -40,12 +41,18 @@ namespace AttendanceService.Controllers
 
                 return ApiResponseHelper.Convert(true, true, message, statusCode, result);
             }
-
+            catch(UnknownException ex)
+            {
+                statusCode = HTTPStatusCode500.InternalServerError;
+                message = ExceptionMessage.SWW;
+                _logger.LogError(ex.Message, ex);
+                return ApiResponseHelper.Convert(false, false, message, statusCode, null);
+            }
             catch (Exception e)
             {
                 statusCode = HTTPStatusCode500.InternalServerError;
                 message = ExceptionMessage.SWW;
-                _logger.LogError(message, e);
+                _logger.LogError(e.Message, e);
                 return ApiResponseHelper.Convert(false, false, message, statusCode, null);
             }
         }
@@ -65,18 +72,26 @@ namespace AttendanceService.Controllers
 
                 return ApiResponseHelper.Convert(true, true, message, statusCode, result);
             }
+            catch(RecordNotFoundException ex)
+            {
+                statusCode = HTTPStatusCode400.NotFound;
+                message = ExceptionMessage.NA;
+                _logger.LogError(ex.Message, ex);
+                return ApiResponseHelper.Convert(true, false, message, statusCode, null);
+            }
 
-            catch (Exception e)
+            catch (UnknownException e)
             {
                 statusCode = HTTPStatusCode500.InternalServerError;
                 message = ExceptionMessage.SWW;
-                _logger.LogError(message, e);
+                _logger.LogError(e.Message, e);
                 return ApiResponseHelper.Convert(false, false, message, statusCode, null);
             }
         }
 
 
         [ProducesResponseType(HTTPStatusCode200.Ok)]
+        [ProducesResponseType(HTTPStatusCode500.InternalServerError)]
         [Route(nameof(GetLeaves))]
         [HttpGet]
         public async Task<IActionResult> GetLeaves(CancellationToken cancellationToken)
@@ -91,17 +106,18 @@ namespace AttendanceService.Controllers
                 return ApiResponseHelper.Convert(true, true, message, statusCode, result);
             }
 
-            catch (Exception e)
+            catch (UnknownException e)
             {
                 statusCode = HTTPStatusCode500.InternalServerError;
                 message = ExceptionMessage.SWW;
-                _logger.LogError(message, e);
+                _logger.LogError(e.Message, e);
                 return ApiResponseHelper.Convert(false, false, message, statusCode, null);
             }
         }
 
         [ProducesResponseType(HTTPStatusCode200.Ok)]
         [ProducesResponseType(HTTPStatusCode400.NotFound)]
+        [ProducesResponseType(HTTPStatusCode500.InternalServerError)]
         [Route(nameof(SoftDeleteLeave))]
         [HttpDelete]
         public async Task<IActionResult> SoftDeleteLeave(string leaveId, CancellationToken cancellationToken)
@@ -117,25 +133,26 @@ namespace AttendanceService.Controllers
             }
             catch (RecordNotFoundException ex)
             {
-                statusCode = HTTPStatusCode400.NotFound;//.InternalServerError;
-                message = ex.Message;
-              
+                statusCode = HTTPStatusCode400.NotFound;
+                message = ExceptionMessage.NA;
+                _logger.LogError(ex.Message, ex);
                 return ApiResponseHelper.Convert(true, false, message, statusCode, null);
             }
-            catch (Exception e)
+            catch (UnknownException ex)
             {
                 statusCode = HTTPStatusCode500.InternalServerError;
                 message = ExceptionMessage.SWW;
-                _logger.LogError(message, e);
+                _logger.LogError(ex.Message, ex);
                 return ApiResponseHelper.Convert(false, false, message, statusCode, null);
             }
         }
 
         [ProducesResponseType(HTTPStatusCode200.Ok)]
         [ProducesResponseType(HTTPStatusCode400.NotFound)]
+        [ProducesResponseType(HTTPStatusCode500.InternalServerError)]
         [Route(nameof(UpdateLeave))]
         [HttpDelete]
-        public async Task<IActionResult> UpdateLeave(RequestUpdateLeave request, string leaveId, CancellationToken cancellationToken)
+        public async Task<IActionResult> UpdateLeave([FromBody]RequestUpdateLeave request, string leaveId, CancellationToken cancellationToken)
         {
             int statusCode = HTTPStatusCode200.Ok;
             string message = "Success";
@@ -145,6 +162,13 @@ namespace AttendanceService.Controllers
                 var result = await _leaveService.UpdateLeave(request,leaveId, userId, cancellationToken);
 
                 return ApiResponseHelper.Convert(true, true, message, statusCode, result);
+            }
+            catch (RecordNotFoundException ex)
+            {
+                statusCode = HTTPStatusCode400.NotFound;
+                message = ExceptionMessage.NA;
+                _logger.LogError(ex.Message, ex);
+                return ApiResponseHelper.Convert(true, false, message, statusCode, null);
             }
 
             catch (Exception e)
