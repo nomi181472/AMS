@@ -3,11 +3,11 @@ using AttendanceServices.Services.WorkingProfileService.Models.Response;
 using AutoMapper;
 using DA.Models.DomainModels;
 
-namespace AttendanceService.Mapping_Profiles
+namespace AttendanceServices.Services.WorkingProfileService.Models
 {
-    public class MappingProfile:Profile
+    public class WorkingProfileMapping : Profile
     {
-        public MappingProfile()
+        public WorkingProfileMapping()
         {
             CreateMap<WorkingProfile, ListAllWorkingProfileResponse>().ReverseMap();
             CreateMap<CreateWorkingProfileRequest, WorkingProfile>().ReverseMap();

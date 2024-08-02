@@ -1,5 +1,5 @@
 using AttendanceService;
-using AttendanceService.Mapping_Profiles;
+using AttendanceServices.Services.WorkingProfileService.Models;
 using AutoMapper;
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +11,7 @@ builder.Services.AddEndpointsApiExplorer();
 
 var mapperConfig = new MapperConfiguration(mc =>
 {
-    mc.AddProfile(new MappingProfile());
+    mc.AddProfile(new WorkingProfileMapping());
 });
 
 
