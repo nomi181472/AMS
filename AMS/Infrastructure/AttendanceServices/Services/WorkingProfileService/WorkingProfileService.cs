@@ -1,4 +1,5 @@
-﻿using AttendanceServices.Services.WorkingProfileService.Models.Request;
+﻿using AttendanceServices.CustomExceptions.Common;
+using AttendanceServices.Services.WorkingProfileService.Models.Request;
 using AttendanceServices.Services.WorkingProfileService.Models.Response;
 using AutoMapper;
 using DA;
@@ -41,7 +42,7 @@ namespace AttendanceServices.Services.WorkingProfileService
             WorkingProfile? workingProfile = _unitOfWork.workingProfileRepo.GetByIdAsync(request.Id ?? "", cancellationToken).Result?.Data;
             if(workingProfile == null)
             {
-                throw new Exception("Working profile you are trying to update does not exist.");
+                throw new RecordNotFoundException("Working profile you are trying to update does not exist.");
             }
             if (string.IsNullOrWhiteSpace(request.Code))
             {
@@ -64,23 +65,22 @@ namespace AttendanceServices.Services.WorkingProfileService
             WorkingProfile? workingProfile = _unitOfWork.workingProfileRepo.GetByIdAsync(Id ?? "", cancellationToken).Result?.Data;
             if (workingProfile == null)
             {
-                throw new Exception("Working profile you are trying to delete does not exist.");
+                throw new RecordNotFoundException("Working profile you are trying to delete does not exist.");
             }
             workingProfile.IsActive = false;
-            workingProfile.IsArchived = true;
             var result = await _unitOfWork.workingProfileRepo.UpdateAsync(workingProfile, UserId, cancellationToken);
             await _unitOfWork.CommitAsync(cancellationToken);
             return result.Result; 
         }
 
-        public async Task<List<ListAllWorkingProfileResponse>> ListAllWorkingProfiles(string UserId, CancellationToken cancellationToken)
+        public async Task<List<WorkingProfileResponse>> ListAllWorkingProfiles(string UserId, CancellationToken cancellationToken)
         {
-            List<ListAllWorkingProfileResponse> workingProfileResponseList = new List<ListAllWorkingProfileResponse>();
-            IEnumerable<WorkingProfile> workingProfiles = _unitOfWork.workingProfileRepo.GetAllAsync(cancellationToken).Result.Data.Where(x=>x.IsActive==true);
+            List<WorkingProfileResponse> workingProfileResponseList = new List<WorkingProfileResponse>();
+            IEnumerable<WorkingProfile> workingProfiles = _unitOfWork.workingProfileRepo.GetAsync(cancellationToken, x => x.IsActive == true).Result.Data;
             foreach (WorkingProfile workingProfile in workingProfiles)
             {
-                ListAllWorkingProfileResponse workingProfileResponse = new ListAllWorkingProfileResponse();
-                workingProfileResponse = _mapper.Map<WorkingProfile, ListAllWorkingProfileResponse>(workingProfile);
+                WorkingProfileResponse workingProfileResponse = new WorkingProfileResponse();
+                workingProfileResponse = _mapper.Map<WorkingProfile, WorkingProfileResponse>(workingProfile);
                 workingProfileResponseList.Add(workingProfileResponse);
             }
             return workingProfileResponseList;
