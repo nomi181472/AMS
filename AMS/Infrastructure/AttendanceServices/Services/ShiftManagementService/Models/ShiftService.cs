@@ -144,14 +144,14 @@ namespace AttendanceServices.Services.ShiftManagementService.Models
                 throw new UnknownException(getterResult.Message);
             }
 
-            // REMOVE THIS DELETE CODE
+            // ALTERNATIVE APPROACH TO SEARCH AND UPDATE 
             //Shift shiftToDelete = getterResult.Data;
             //var setterResult = await _unit.shiftRepo.UpdateOnConditionAsync(
             //    x => x.IsActive == true && x.Code == request.Code,
             //    x => x.SetProperty(shiftToDelete => shiftToDelete.IsActive, false),
             //    cancellationToken
             //);
-
+            //
             //if (setterResult == null)
             //{
             //    throw new UnknownException(setterResult.Message);
@@ -166,12 +166,6 @@ namespace AttendanceServices.Services.ShiftManagementService.Models
 
                 }}
             ;
-
-            // REMOVE THIS CODE
-            //if (response == null || !response.Any())
-            //{
-            //    throw new UnknownException("Failed to generate a response for the updated shift. Please try again.");
-            //}
 
             return response;
         }
