@@ -76,7 +76,7 @@ namespace AttendanceServices.Services.WorkingProfileService
         public async Task<List<WorkingProfileResponse>> ListAllWorkingProfiles(string UserId, CancellationToken cancellationToken)
         {
             List<WorkingProfileResponse> workingProfileResponseList = new List<WorkingProfileResponse>();
-            IEnumerable<WorkingProfile> workingProfiles = _unitOfWork.workingProfileRepo.GetAllAsync(cancellationToken).Result.Data.Where(x=>x.IsActive==true);
+            IEnumerable<WorkingProfile> workingProfiles = _unitOfWork.workingProfileRepo.GetAsync(cancellationToken, x => x.IsActive == true).Result.Data;
             foreach (WorkingProfile workingProfile in workingProfiles)
             {
                 WorkingProfileResponse workingProfileResponse = new WorkingProfileResponse();

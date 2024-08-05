@@ -72,7 +72,7 @@ namespace AttendanceServices.Services.FiscalYearService
         public async Task<List<FiscalYearResponse>> ListAllFiscalYears(string userId, CancellationToken cancellationToken)
         {
             List<FiscalYearResponse> fiscalYearResponseList = new List<FiscalYearResponse>();
-            IEnumerable<FiscalYear> fiscalYears = _unitOfWork.fiscalYearRepo.GetAllAsync(cancellationToken).Result.Data.Where(x => x.IsActive == true);
+            IEnumerable<FiscalYear> fiscalYears = _unitOfWork.fiscalYearRepo.GetAsync(cancellationToken, x => x.IsActive == true).Result.Data;
             foreach (FiscalYear fiscalYear in fiscalYears)
             {
                 FiscalYearResponse fiscalYearResponse = new FiscalYearResponse();
