@@ -9,7 +9,7 @@ namespace AttendanceServices.Services.WorkingProfileService.Models
     {
         public WorkingProfileMapping()
         {
-            CreateMap<WorkingProfile, ListAllWorkingProfileResponse>().ReverseMap();
+            CreateMap<WorkingProfile, WorkingProfileResponse>().ReverseMap();
             CreateMap<CreateWorkingProfileRequest, WorkingProfile>().ReverseMap();
             CreateMap<UpdateWorkingProfileRequest, WorkingProfile>().ReverseMap();
         }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AttendanceServices.Services.WorkingProfileService.Models.Response
 {
-    public class ListAllWorkingProfileResponse
+    public class WorkingProfileResponse
     {
         public virtual string? Id { get; set; }
         public virtual string? Code { get; set; }
