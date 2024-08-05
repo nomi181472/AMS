@@ -14,7 +14,7 @@ namespace DA
         IGenericRepository<Allowance, string> allowanceRepo { get;  }
         IGenericRepository<WorkingProfile, string> workingProfileRepo { get; }
         IGenericRepository<Shift, string> shiftRepo { get; }
-
+        IGenericRepository<FiscalYear, string> fiscalYearRepo { get; }
         IGenericRepository<Leave, string> leaveRepo { get; }
         void Commit();
         Task CommitAsync(CancellationToken cancellationToken);

@@ -15,6 +15,6 @@ namespace AttendanceServices.Services.WorkingProfileService
         Task<bool> AddWorkingProfile(CreateWorkingProfileRequest request, string userId, CancellationToken cancellationToken);
         Task<bool> UpdateWorkingProfile(UpdateWorkingProfileRequest request, string UserId, CancellationToken cancellationToken);
         Task<bool> DeleteWorkingProfileById(string Id, string UserId, CancellationToken cancellationToken);
-        Task<List<ListAllWorkingProfileResponse>> ListAllWorkingProfiles(string UserId, CancellationToken cancellationToken);
+        Task<List<WorkingProfileResponse>> ListAllWorkingProfiles(string UserId, CancellationToken cancellationToken);
     }
 }
