@@ -26,11 +26,16 @@ namespace AttendanceServices.Services.ShiftManagementService.Models
 
         public async Task<bool> AddShift(RequestAddShift request, string userId, CancellationToken cancellationToken)
         {
+            if (request == null)
+            {
+                throw new ArgumentNullException(nameof(request), "The request cannot be null.");
+            }
+
             var entity = request.ToDomain();
 
             if (entity == null)
             {
-                throw new UnknownException("Entity is null");
+                throw new ArgumentException("The request is invalid and could not be converted to a domain entity.", nameof(request));
             }
 
             entity.UpdatedBy = userId;
@@ -60,7 +65,7 @@ namespace AttendanceServices.Services.ShiftManagementService.Models
             }
             else
             {
-                throw new UnknownException(result.Message);
+                throw new InvalidOperationException("Failed to retrieve shift data.");
             }
         }
 
@@ -68,16 +73,11 @@ namespace AttendanceServices.Services.ShiftManagementService.Models
         {
             if (request == null)
             {
-                throw new UnknownException("Request is null");
-            }
-
-            if (userId == null)
-            {
-                throw new UnknownException("UserId is null");
+                throw new ArgumentNullException(nameof(request), "The request cannot be null.");
             }
 
             var status = request.Status ?? KConstantCommon.UseNA;
-            var result=await _unit.shiftRepo.UpdateOnConditionAsync(
+            var setterResult = await _unit.shiftRepo.UpdateOnConditionAsync(
                 // 1st param: matching condition
                 x => x.IsActive==true&&x.Code==request.Code,
                 // 2nd param: set the updated value
@@ -88,9 +88,9 @@ namespace AttendanceServices.Services.ShiftManagementService.Models
                 , cancellationToken
             );
 
-            if (result == null)
+            if (setterResult == null)
             {
-                throw new UnknownException(result.Message);
+                throw new InvalidOperationException("The update operation did not return a result.");
             }
 
             await _unit.CommitAsync(cancellationToken);
@@ -99,13 +99,13 @@ namespace AttendanceServices.Services.ShiftManagementService.Models
             {
                 new ResponseGetShiftUpdated
                 {
-                    // response is always left bool
+                    Code = request.Code,
                 }}
             ;
 
             if (response == null || !response.Any())
             {
-                throw new UnknownException("Failed to generate a response for the updated shift. Please try again.");
+                throw new InvalidOperationException("The response list is null or empty, indicating that no shifts were updated.");
             }
 
             return response;
@@ -163,7 +163,7 @@ namespace AttendanceServices.Services.ShiftManagementService.Models
             {
                 new ResponseGetShiftDeleted
                 {
-
+                    Code = request.Code
                 }}
             ;
 
