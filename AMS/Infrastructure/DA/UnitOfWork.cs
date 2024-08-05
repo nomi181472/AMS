@@ -24,6 +24,7 @@ namespace DA
 
         public IGenericRepository<Shift, string> shiftRepo => new GenericRepository<Shift, string>(_db);
 
+        public IGenericRepository<FiscalYear, string> fiscalYearRepo => new GenericRepository<FiscalYear, string>(_db);
         public void Commit()
         {
             _db.SaveChanges();
