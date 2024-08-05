@@ -121,24 +121,43 @@ namespace AttendanceServices.Services.ShiftManagementService.Models
             Expression<Func<Shift, bool>> filter = shift => shift.Code == request.Code && shift.IsActive == true;
             var getterResult = await _unit.shiftRepo.GetSingleAsync(cancellationToken, filter);
 
-            if (!getterResult.Status || getterResult.Data == null)
+            if (getterResult.Status)
             {
-                throw new UnknownException("Shift not found or error retrieving shift.");
+                if (getterResult.Data != null)
+                {
+                    var shift = getterResult.Data;
+                    shift.IsActive = false;
+                    shift.IsArchived = true;
+                    shift.UpdatedBy = userId;
+                    shift.UpdatedDate = DateTime.Now;
+
+                    await _unit.shiftRepo.UpdateAsync(shift, userId, cancellationToken);
+                    await _unit.CommitAsync(cancellationToken);
+                }
+                else
+                {
+                    throw new RecordNotFoundException("leave Id not found.");
+                }
+            }
+            else
+            {
+                throw new UnknownException(getterResult.Message);
             }
 
-            Shift shiftToDelete = getterResult.Data;
-            var setterResult = await _unit.shiftRepo.UpdateOnConditionAsync(
-                x => x.IsActive == true && x.Code == request.Code,
-                x => x.SetProperty(shiftToDelete => shiftToDelete.IsActive, false),
-                cancellationToken
-            );
+            // REMOVE THIS DELETE CODE
+            //Shift shiftToDelete = getterResult.Data;
+            //var setterResult = await _unit.shiftRepo.UpdateOnConditionAsync(
+            //    x => x.IsActive == true && x.Code == request.Code,
+            //    x => x.SetProperty(shiftToDelete => shiftToDelete.IsActive, false),
+            //    cancellationToken
+            //);
 
-            if (setterResult == null)
-            {
-                throw new UnknownException(setterResult.Message);
-            }
+            //if (setterResult == null)
+            //{
+            //    throw new UnknownException(setterResult.Message);
+            //}
 
-            await _unit.CommitAsync(cancellationToken);
+            //await _unit.CommitAsync(cancellationToken);
 
             var response = new List<ResponseGetShiftDeleted>
             {
@@ -148,10 +167,11 @@ namespace AttendanceServices.Services.ShiftManagementService.Models
                 }}
             ;
 
-            if (response == null || !response.Any())
-            {
-                throw new UnknownException("Failed to generate a response for the updated shift. Please try again.");
-            }
+            // REMOVE THIS CODE
+            //if (response == null || !response.Any())
+            //{
+            //    throw new UnknownException("Failed to generate a response for the updated shift. Please try again.");
+            //}
 
             return response;
         }

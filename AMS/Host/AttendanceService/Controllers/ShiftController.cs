@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PAttendanceServices.CustomExceptions.CustomExceptionMessage;
 using PaymentGateway.API.Common;
+using System.Net;
 
 namespace AttendanceService.Controllers
 {
@@ -39,6 +40,13 @@ namespace AttendanceService.Controllers
                 var result = await _shiftService.AddShift(request, userId, cancellationToken);
                 return ApiResponseHelper.Convert(true, true, message, statusCode, result);
             }
+            catch (RecordNotFoundException ex)
+            {
+                _logger.LogError(ex.Message, ex);
+                statusCode = (int)HttpStatusCode.NotFound;
+                message = "Shift not found.";
+                return ApiResponseHelper.Convert(false, false, message, (int)statusCode, null);
+            }
             catch (Exception e)
             {
                 statusCode = HTTPStatusCode500.InternalServerError;
@@ -61,6 +69,13 @@ namespace AttendanceService.Controllers
                 var result = await _shiftService.ListWithDetails(cancellationToken);
                 message = $"Total: {result.Count()}";
                 return ApiResponseHelper.Convert(true, true, message, statusCode, result);
+            }
+            catch (RecordNotFoundException ex)
+            {
+                _logger.LogError(ex.Message, ex);
+                statusCode = (int)HttpStatusCode.NotFound;
+                message = "Shift not found.";
+                return ApiResponseHelper.Convert(false, false, message, (int)statusCode, null);
             }
             catch (Exception e)
             {
@@ -95,6 +110,13 @@ namespace AttendanceService.Controllers
 
                 return ApiResponseHelper.Convert(true, true, message, statusCode, result);
             }
+            catch (RecordNotFoundException ex)
+            {
+                _logger.LogError(ex.Message, ex);
+                statusCode = (int)HttpStatusCode.NotFound;
+                message = "Shift not found.";
+                return ApiResponseHelper.Convert(false, false, message, (int)statusCode, null);
+            }
             catch (Exception e)
             {
                 statusCode = HTTPStatusCode500.InternalServerError;
@@ -128,12 +150,12 @@ namespace AttendanceService.Controllers
 
                 return ApiResponseHelper.Convert(true, true, message, statusCode, result);
             }
-            catch (UnknownException ex)
+            catch (RecordNotFoundException ex)
             {
                 _logger.LogError(ex.Message, ex);
-                statusCode = HTTPStatusCode400.BadRequest;
-                message = ex.Message;
-                return ApiResponseHelper.Convert(false, false, message, statusCode, null);
+                statusCode = (int) HttpStatusCode.NotFound;
+                message = "Shift not found.";
+                return ApiResponseHelper.Convert(false, false, message, (int)statusCode, null);
             }
             catch (Exception ex)
             {
