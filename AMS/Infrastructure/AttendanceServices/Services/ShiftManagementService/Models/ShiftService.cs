@@ -113,10 +113,10 @@ namespace AttendanceServices.Services.ShiftManagementService.Models
 
         public async Task<List<ResponseGetShiftDeleted>> DeleteShift(RequestDeleteShift request, string userId, CancellationToken cancellationToken)
         {
-            if (request.Code == null)
+            if (request == null)
             {
-                throw new UnknownException("Request is null");
-            };
+                throw new ArgumentNullException(nameof(request), "The request cannot be null.");
+            }
 
             Expression<Func<Shift, bool>> filter = shift => shift.Code == request.Code && shift.IsActive == true;
             var getterResult = await _unit.shiftRepo.GetSingleAsync(cancellationToken, filter);
@@ -141,7 +141,7 @@ namespace AttendanceServices.Services.ShiftManagementService.Models
             }
             else
             {
-                throw new UnknownException(getterResult.Message);
+                throw new InvalidOperationException("Failed to retrieve the shift data.");
             }
 
             // ALTERNATIVE APPROACH TO SEARCH AND UPDATE 
