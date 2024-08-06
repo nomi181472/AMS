@@ -10,6 +10,10 @@ using System.Text;
 using System.Threading.Tasks;
 using AttendanceServices.Services.ShiftManagementService.Models;
 using AttendanceServices.Services.ShiftManagementService.Models.Request;
+using DA.Models.RepoResultModels;
+using DA.Repositories.CommonRepositories;
+using Microsoft.EntityFrameworkCore.Query;
+using System.Linq.Expressions;
 
 namespace AttendanceService.Test
 {
@@ -84,5 +88,81 @@ namespace AttendanceService.Test
             var retrievedShift = shifts.FirstOrDefault(s => s.Code == code);
             Assert.That(code, Is.EqualTo(retrievedShift.Code));
         }
+
+        [Test]
+        public async Task Should_Return_Response_When_Update_Succeeds()
+        {
+            // Arrange
+            var request = new RequestUpdateShift
+            {
+                Code = "SH-001",
+                Description = "Updated Description",
+                Status = "Updated Status"
+            };
+            var userId = "anyUserId";
+
+            Expression<Func<Shift, bool>> filter = x => x.IsActive && x.Code == request.Code;
+            Expression<Func<SetPropertyCalls<Shift>, SetPropertyCalls<Shift>>> setPropertyCalls = x => x
+                .SetProperty(s => s.Description, request.Description ?? AttendanceServices.EnumsAndConstants.Constant.KConstantCommon.UseNA)
+                .SetProperty(s => s.Status, request.Status ?? AttendanceServices.EnumsAndConstants.Constant.KConstantCommon.UseNA)
+                .SetProperty(s => s.UpdatedBy, userId)
+                .SetProperty(s => s.UpdatedDate, DateTime.Now);
+
+            var mockShiftRepo = new Mock<IGenericRepository<Shift, string>>();
+            mockShiftRepo.Setup(repo => repo.UpdateOnConditionAsync(
+                It.IsAny<Expression<Func<Shift, bool>>>(),
+                It.IsAny<Expression<Func<SetPropertyCalls<Shift>, SetPropertyCalls<Shift>>>>(),
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new SetterResult { Message = "Success", Result = true, IsException = false });
+
+            var mockUnitOfWork = new Mock<IUnitOfWork>();
+            mockUnitOfWork.Setup(uow => uow.shiftRepo).Returns(mockShiftRepo.Object);
+            var shiftService = new ShiftService(mockUnitOfWork.Object);
+
+            // Act
+            var result = await shiftService.UpdateShift(request, userId, CancellationToken.None);
+
+            // Assert
+            Assert.That(result.First().Code, Is.EqualTo(request.Code));
+        }
+
+        [Test]
+        public async Task DeleteShift_Should_Return_Response_When_Delete_Succeeds()
+        {
+            // Arrange
+            var request = new RequestDeleteShift
+            {
+                Code = "SH-001"
+            };
+            var userId = "anyUserId";
+
+            var shift = new Shift
+            {
+                Code = request.Code,
+                IsActive = true
+            };
+
+            var mockShiftRepo = new Mock<IGenericRepository<Shift, string>>();
+            mockShiftRepo.Setup(repo => repo.GetSingleAsync(
+                It.IsAny<CancellationToken>(),
+                It.IsAny<Expression<Func<Shift, bool>>>(),
+                It.IsAny<string>() // Explicitly include the optional parameter with a default value
+            )).ReturnsAsync(new GetterResult<Shift> { Data = shift, Status = true });
+
+            mockShiftRepo.Setup(repo => repo.UpdateAsync(It.IsAny<Shift>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new SetterResult { Result = true, Message = "Success", IsException = false });
+
+            var mockUnitOfWork = new Mock<IUnitOfWork>();
+            mockUnitOfWork.Setup(uow => uow.shiftRepo).Returns(mockShiftRepo.Object);
+            var shiftService = new ShiftService(mockUnitOfWork.Object);
+
+            // Act
+            var result = await shiftService.DeleteShift(request, userId, CancellationToken.None);
+
+            // Assert
+            Assert.That(result.First().Code, Is.EqualTo(request.Code));
+        }
+
+
     }
 }
