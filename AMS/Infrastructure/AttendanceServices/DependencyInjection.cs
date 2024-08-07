@@ -1,5 +1,6 @@
 ﻿
 using AttendanceServices.Services.AllowanceService;
+using AttendanceServices.Services.DeductionService;
 using AttendanceServices.Services.LeaveService;
 using AttendanceServices.Services.ShiftManagementService.Models;
 using AttendanceServices.Services.WorkingProfileService;
@@ -32,6 +33,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
         services.TryAddScoped<IShiftService, ShiftService>();
         services.TryAddTransient<IWorkingProfileService, WorkingProfileService>();
         services.TryAddTransient<ILeaveService,LeaveService>();
+        services.TryAddTransient<IDeductionService, DeductionService>();
 
 
 

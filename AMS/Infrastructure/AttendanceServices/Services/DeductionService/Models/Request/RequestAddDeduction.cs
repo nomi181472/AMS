@@ -1,20 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DA.Models.DomainModels
+namespace AttendanceServices.Services.DeductionService.Models.Request
 {
-    public class Deduction : Base<string>
+    public class RequestAddDeduction
     {
+        [Required]
         public string Code { get; set; }
+        [Required]
         public string Name { get; set; }
+        [Required]
         public string Description { get; set; }
+        [Required]
         public string Type { get; set; }
-
-        public virtual ICollection<ShiftDeductionScheduler> ShiftDeductionScheduler { get; set; }=new 
-            List<ShiftDeductionScheduler>();
-
     }
 }
