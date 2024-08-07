@@ -1,6 +1,7 @@
-﻿
-using AttendanceService.Common;
+﻿using AttendanceService.Common;
 using AttendanceServices.CustomExceptions.Common;
+using AttendanceServices.Services.DeductionService;
+using AttendanceServices.Services.DeductionService.Models.Request;
 using AttendanceServices.Services.LeaveService;
 using AttendanceServices.Services.LeaveService.Models.Request;
 using Logger;
@@ -13,35 +14,34 @@ namespace AttendanceService.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class LeaveController : ControllerBase
+    public class DeductionController : ControllerBase
     {
         private readonly ICustomLogger _logger;
-        readonly ILeaveService _leaveService;
+        readonly IDeductionService _deductionService;
 
-        public LeaveController(ICustomLogger logger, ILeaveService leaveService)
+        public DeductionController(ICustomLogger logger, IDeductionService deductionService)
         {
             _logger = logger;
-            _leaveService = leaveService;
+            _deductionService = deductionService;
         }
-
 
         [ProducesResponseType(HTTPStatusCode200.Created)]
         [ProducesResponseType(HTTPStatusCode500.InternalServerError)]
-        [Route(nameof(AddLeave))]
+        [Route(nameof(AddDeduction))]
         [HttpPost]
 
-        public async Task<IActionResult> AddLeave(RequestAddLeave request, CancellationToken cancellationToken)
+        public async Task<IActionResult> AddDeduction(RequestAddDeduction request, CancellationToken cancellationToken)
         {
             int statusCode = HTTPStatusCode200.Ok;
             string message = "Success";
             try
             {
                 string userId = "anyIdfornow";// jwt context.User
-                var result = await _leaveService.AddLeave(request, userId, cancellationToken);
+                var result = await _deductionService.AddDeduction(request, userId, cancellationToken);
 
                 return ApiResponseHelper.Convert(true, true, message, statusCode, result);
             }
-            catch(UnknownException ex)
+            catch (UnknownException ex)
             {
                 statusCode = HTTPStatusCode500.InternalServerError;
                 message = ExceptionMessage.SWW;
@@ -59,20 +59,52 @@ namespace AttendanceService.Controllers
 
         [ProducesResponseType(HTTPStatusCode200.Ok)]
         [ProducesResponseType(HTTPStatusCode400.NotFound)]
-        [Route(nameof(GetLeave))]
+        [Route(nameof(GetDeductionByCode))]
         [HttpGet]
-        public async Task<IActionResult> GetLeave(string leaveId, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetDeductionByCode(string deductionCode, CancellationToken cancellationToken)
         {
             int statusCode = HTTPStatusCode200.Ok;
             string message = "Success";
             try
             {
                 string userId = "anyIdfornow";// jwt context.User
-                var result = await _leaveService.GetLeave(leaveId, cancellationToken);
+                var result = await _deductionService.GetDeductionByCode(deductionCode, cancellationToken);
 
                 return ApiResponseHelper.Convert(true, true, message, statusCode, result);
             }
-            catch(RecordNotFoundException ex)
+            catch (RecordNotFoundException ex)
+            {
+                statusCode = HTTPStatusCode400.NotFound;
+                message = ExceptionMessage.NA;
+                _logger.LogError(ex.Message, ex);
+                return ApiResponseHelper.Convert(true, false, message, statusCode, null);
+            }
+
+            catch (UnknownException e)
+            {
+                statusCode = HTTPStatusCode500.InternalServerError;
+                message = ExceptionMessage.SWW;
+                _logger.LogError(e.Message, e);
+                return ApiResponseHelper.Convert(false, false, message, statusCode, null);
+            }
+        }
+
+        [ProducesResponseType(HTTPStatusCode200.Ok)]
+        [ProducesResponseType(HTTPStatusCode400.NotFound)]
+        [Route(nameof(GetDeductionById))]
+        [HttpGet]
+        public async Task<IActionResult> GetDeductionById(string deductionId, CancellationToken cancellationToken)
+        {
+            int statusCode = HTTPStatusCode200.Ok;
+            string message = "Success";
+            try
+            {
+                string userId = "anyIdfornow";// jwt context.User
+                var result = await _deductionService.GetDeductionById(deductionId, cancellationToken);
+
+                return ApiResponseHelper.Convert(true, true, message, statusCode, result);
+            }
+            catch (RecordNotFoundException ex)
             {
                 statusCode = HTTPStatusCode400.NotFound;
                 message = ExceptionMessage.NA;
@@ -92,16 +124,16 @@ namespace AttendanceService.Controllers
 
         [ProducesResponseType(HTTPStatusCode200.Ok)]
         [ProducesResponseType(HTTPStatusCode500.InternalServerError)]
-        [Route(nameof(GetLeaves))]
+        [Route(nameof(GetDeductions))]
         [HttpGet]
-        public async Task<IActionResult> GetLeaves(CancellationToken cancellationToken)
+        public async Task<IActionResult> GetDeductions(CancellationToken cancellationToken)
         {
             int statusCode = HTTPStatusCode200.Ok;
             string message = "Success";
             try
             {
                 string userId = "anyIdfornow";// jwt context.User
-                var result = await _leaveService.GetLeaves(cancellationToken);
+                var result = await _deductionService.GetDeductions(cancellationToken);
 
                 return ApiResponseHelper.Convert(true, true, message, statusCode, result);
             }
@@ -118,16 +150,16 @@ namespace AttendanceService.Controllers
         [ProducesResponseType(HTTPStatusCode200.Ok)]
         [ProducesResponseType(HTTPStatusCode400.NotFound)]
         [ProducesResponseType(HTTPStatusCode500.InternalServerError)]
-        [Route(nameof(SoftDeleteLeave))]
+        [Route(nameof(SoftDeleteDeduction))]
         [HttpDelete]
-        public async Task<IActionResult> SoftDeleteLeave(string leaveId, CancellationToken cancellationToken)
+        public async Task<IActionResult> SoftDeleteDeduction(string deductionCode, CancellationToken cancellationToken)
         {
             int statusCode = HTTPStatusCode200.Ok;
             string message = "Success";
             try
             {
                 string userId = "anyIdfornow";// jwt context.User
-                var result = await _leaveService.SoftDeleteLeave(leaveId,userId,cancellationToken);
+                var result = await _deductionService.SoftDeleteDeduction(deductionCode, userId, cancellationToken);
 
                 return ApiResponseHelper.Convert(true, true, message, statusCode, result);
             }
@@ -150,16 +182,16 @@ namespace AttendanceService.Controllers
         [ProducesResponseType(HTTPStatusCode200.Ok)]
         [ProducesResponseType(HTTPStatusCode400.NotFound)]
         [ProducesResponseType(HTTPStatusCode500.InternalServerError)]
-        [Route(nameof(UpdateLeave))]
+        [Route(nameof(UpdateDeduction))]
         [HttpPut]
-        public async Task<IActionResult> UpdateLeave([FromBody]RequestUpdateLeave request, string leaveId, CancellationToken cancellationToken)
+        public async Task<IActionResult> UpdateDeduction([FromBody] RequestUpdateDeduction request, string deductionCode, CancellationToken cancellationToken)
         {
             int statusCode = HTTPStatusCode200.Ok;
             string message = "Success";
             try
             {
                 string userId = "anyIdfornow";// jwt context.User
-                var result = await _leaveService.UpdateLeave(request,leaveId, userId, cancellationToken);
+                var result = await _deductionService.UpdateDeduction(request, deductionCode, userId, cancellationToken);
 
                 return ApiResponseHelper.Convert(true, true, message, statusCode, result);
             }
