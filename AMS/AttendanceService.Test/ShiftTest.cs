@@ -14,6 +14,7 @@ using DA.Models.RepoResultModels;
 using DA.Repositories.CommonRepositories;
 using Microsoft.EntityFrameworkCore.Query;
 using System.Linq.Expressions;
+using AttendanceServices.Services.ShiftManagementService.Models.Response;
 
 namespace AttendanceService.Test
 {
@@ -22,12 +23,20 @@ namespace AttendanceService.Test
         private Initializer initializer;
         private ShiftService shiftService;
         private UnitOfWork unitOfWork;
+
+        private Mock<IUnitOfWork> mockUnitOfWork;
+        private Mock<IGenericRepository<Shift, string>> mockShiftRepo;
+
         [SetUp]
         public void Setup()
         {
             initializer = new Initializer();
             unitOfWork = new UnitOfWork(initializer._dbContext);
             shiftService = new ShiftService(unitOfWork);
+
+            mockShiftRepo = new Mock<IGenericRepository<Shift,string>>();
+            mockUnitOfWork = new Mock<IUnitOfWork>();
+            mockUnitOfWork.Setup(uow => uow.shiftRepo).Returns(mockShiftRepo.Object);
         }
 
         [TestCase("WP-001", "Dummy Description", "Dummy Status" , 3, "2024-08-02T08:00:00", "2024-08-02T17:00:00", "anyForNow")]
@@ -108,7 +117,6 @@ namespace AttendanceService.Test
                 .SetProperty(s => s.UpdatedBy, userId)
                 .SetProperty(s => s.UpdatedDate, DateTime.Now);
 
-            var mockShiftRepo = new Mock<IGenericRepository<Shift, string>>();
             mockShiftRepo.Setup(repo => repo.UpdateOnConditionAsync(
                 It.IsAny<Expression<Func<Shift, bool>>>(),
                 It.IsAny<Expression<Func<SetPropertyCalls<Shift>, SetPropertyCalls<Shift>>>>(),
@@ -142,7 +150,6 @@ namespace AttendanceService.Test
                 IsActive = true
             };
 
-            var mockShiftRepo = new Mock<IGenericRepository<Shift, string>>();
             mockShiftRepo.Setup(repo => repo.GetSingleAsync(
                 It.IsAny<CancellationToken>(),
                 It.IsAny<Expression<Func<Shift, bool>>>(),
@@ -163,6 +170,29 @@ namespace AttendanceService.Test
             Assert.That(result.First().Code, Is.EqualTo(request.Code));
         }
 
+        [Test]
+        public async Task SingleWithDetails_Should_Return_ShiftDetails_When_ShiftExists()
+        {
+            string code = "myShift";
+            var shift = new Shift { Code = code, IsActive = true };
+            var shiftDetails = new Shift { Code = code, IsActive = true };
 
+            mockShiftRepo.Setup(repo => repo.GetSingleAsync(
+                It.IsAny<CancellationToken>(),
+                It.IsAny<Expression<Func<Shift, bool>>>(),
+                It.IsAny<string>()
+            )).ReturnsAsync(new GetterResult<Shift> { Data = shift, Status = true });
+
+            mockShiftRepo.Setup(repo => repo.GetByIdAsync(
+                It.IsAny<string>(),
+                It.IsAny<CancellationToken>()
+            )).ReturnsAsync(new GetterResult<Shift> { Data = shiftDetails, Status = true });
+
+            // Act
+            var result = await shiftService.SingleWithDetails(code, CancellationToken.None);
+
+            // Assert
+            Assert.That(result.Code, Is.EqualTo(shift.Code));
+        }
     }
 }

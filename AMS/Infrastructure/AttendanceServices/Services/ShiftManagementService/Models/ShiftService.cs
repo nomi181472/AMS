@@ -75,24 +75,23 @@ namespace AttendanceServices.Services.ShiftManagementService.Models
         {
             Expression<Func<Shift, bool>> filter = shift => shift.Code == code && shift.IsActive == true;
             var getterResult = await _unit.shiftRepo.GetSingleAsync(cancellationToken, filter);
-            var result = await _unit.shiftRepo.GetByIdAsync(getterResult.Data.Id, cancellationToken);
 
             ResponseGetShiftWithDetails response;
-            if(result.Status)
+            if(getterResult.Status)
             {
-                if(result.Data != null)
+                if(getterResult.Data != null)
                 {
-                    response = CRTShift.ToResponseWithDetails(result.Data);
+                    response = CRTShift.ToResponseWithDetails(getterResult.Data);
                     return response;
                 }
                 else
                 {
-                    throw new RecordNotFoundException("Leave does not exist with Id: " + code);
+                    throw new RecordNotFoundException("Shift does not exist with Id: " + code);
                 }
             }
             else
             {
-                throw new InvalidOperationException($"An error occurred while processing the request: {result.Message}");
+                throw new InvalidOperationException($"An error occurred while processing the request: {getterResult.Message}");
             }
         }
 
