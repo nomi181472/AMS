@@ -16,6 +16,8 @@ namespace AttendanceServices.Services.ShiftManagementService.Models
 
         Task<List<ResponseGetShiftWithDetails>> ListWithDetails(CancellationToken cancellationToken);
 
+        Task<ResponseGetShiftWithDetails> SingleWithDetails(string code, CancellationToken cancellationToken);
+
         Task<List<ResponseGetShiftUpdated>> UpdateShift(RequestUpdateShift request, string userId, CancellationToken cancellationToken);
 
         Task<List<ResponseGetShiftDeleted>> DeleteShift(RequestDeleteShift request, string userId, CancellationToken cancellationToken);
