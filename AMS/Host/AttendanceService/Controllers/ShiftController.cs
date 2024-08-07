@@ -3,6 +3,7 @@ using AttendanceServices.CustomExceptions.Common;
 using AttendanceServices.Services.AllowanceService.Models.Request;
 using AttendanceServices.Services.ShiftManagementService.Models;
 using AttendanceServices.Services.ShiftManagementService.Models.Request;
+using DA.Models.DomainModels;
 using Logger;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -82,6 +83,37 @@ namespace AttendanceService.Controllers
                 _logger.LogError(e.Message, e);
                 statusCode = HTTPStatusCode500.InternalServerError;
                 message = ExceptionMessage.SWW;
+                return ApiResponseHelper.Convert(false, false, message, statusCode, null);
+            }
+        }
+
+        [ProducesResponseType(HTTPStatusCode200.Ok)]
+        [Route(nameof(ListSingleWithDetails))]
+        [HttpGet()]
+        public async Task<IActionResult> ListSingleWithDetails(string code, CancellationToken cancellationToken)
+        {
+            int statusCode = HTTPStatusCode200.Ok;
+            string message = "Success";
+            try
+            {
+                string userId = "anyIdfornow";
+                var result = await _shiftService.SingleWithDetails(code, cancellationToken);
+
+                return ApiResponseHelper.Convert(true, true, message, statusCode, result);
+            }
+            catch (RecordNotFoundException ex)
+            {
+                statusCode = HTTPStatusCode400.NotFound;
+                message = ExceptionMessage.NA;
+                _logger.LogError(ex.Message, ex);
+                return ApiResponseHelper.Convert(true, false, message, statusCode, null);
+            }
+
+            catch (UnknownException e)
+            {
+                statusCode = HTTPStatusCode500.InternalServerError;
+                message = ExceptionMessage.SWW;
+                _logger.LogError(e.Message, e);
                 return ApiResponseHelper.Convert(false, false, message, statusCode, null);
             }
         }
