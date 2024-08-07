@@ -13,6 +13,8 @@ using AttendanceServices.Services.AllowanceService.Models;
 using AttendanceServices.EnumsAndConstants.Constant;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore.Query;
+using AttendanceServices.Services.LeaveService.Models.Response;
+using AttendanceServices.Services.LeaveService.Models;
 
 namespace AttendanceServices.Services.ShiftManagementService.Models
 {
@@ -66,6 +68,30 @@ namespace AttendanceServices.Services.ShiftManagementService.Models
             else
             {
                 throw new InvalidOperationException("Failed to retrieve shift data.");
+            }
+        }
+
+        public async Task<ResponseGetShiftWithDetails> SingleWithDetails(string code, CancellationToken cancellationToken)
+        {
+            Expression<Func<Shift, bool>> filter = shift => shift.Code == code && shift.IsActive == true;
+            var getterResult = await _unit.shiftRepo.GetSingleAsync(cancellationToken, filter);
+
+            ResponseGetShiftWithDetails response;
+            if(getterResult.Status)
+            {
+                if(getterResult.Data != null)
+                {
+                    response = CRTShift.ToResponseWithDetails(getterResult.Data);
+                    return response;
+                }
+                else
+                {
+                    throw new RecordNotFoundException("Shift does not exist with Id: " + code);
+                }
+            }
+            else
+            {
+                throw new InvalidOperationException($"An error occurred while processing the request: {getterResult.Message}");
             }
         }
 
