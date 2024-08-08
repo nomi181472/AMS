@@ -1,5 +1,7 @@
-﻿using AttendanceServices.Services.ShiftAssignmentService.Request;
+﻿using AttendanceServices.Services.DeductionService.Models;
+using AttendanceServices.Services.ShiftAssignmentService.Request;
 using AttendanceServices.Services.ShiftAssignmentService.Response;
+using DA;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,11 +12,36 @@ namespace AttendanceServices.Services.ShiftAssignmentService
 {
     public class ShiftAssignmentService : IShiftAssignmentService
     {
-        public Task<bool> AddShiftAssignment(RequestAddShiftWorkingProfile request, string userId, CancellationToken cancellationToken)
+        IUnitOfWork _unit;
+        public ShiftAssignmentService(IUnitOfWork unitOfWork)
         {
+            _unit = unitOfWork;
+        }
 
+        public async Task<bool> AddShiftAssignment(RequestAddShiftWorkingProfile request, string userId, CancellationToken cancellationToken)
+        {
+            if (request == null)
+            {
+                throw new ArgumentNullException(nameof(request), "The request cannot be null.");
+            }
 
-            return null;
+            var entity = request.ToDomain();
+
+            if (entity == null)
+            {
+                throw new ArgumentException("The request is invalid and could not be converted to a domain entity.", nameof(request));
+            }
+
+            entity.UpdatedBy = userId;
+            entity.CreatedDate = DateTime.Now;
+            entity.UpdatedDate = DateTime.Now;
+            entity.IsArchived = false;
+            entity.IsActive = true;
+
+            await _unit.shiftWorkingProfileRepo.AddAsync(entity, userId, cancellationToken);
+            await _unit.CommitAsync(cancellationToken);
+
+            return true;
         }
 
         public Task<List<ResponseGetShiftWorkingProfileWithDetails>> ListWithDetails(CancellationToken cancellationToken)
