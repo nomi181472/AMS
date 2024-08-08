@@ -8,13 +8,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AttendanceServices.Services.ShiftManagementService.Models;
 using AttendanceServices.Services.ShiftManagementService.Models.Request;
 using DA.Models.RepoResultModels;
 using DA.Repositories.CommonRepositories;
 using Microsoft.EntityFrameworkCore.Query;
 using System.Linq.Expressions;
 using AttendanceServices.Services.ShiftManagementService.Models.Response;
+using AttendanceServices.Services.ShiftManagementService;
 
 namespace AttendanceService.Test
 {
