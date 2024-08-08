@@ -21,8 +21,8 @@ namespace DA.AppDbContexts
         public DbSet<Leave> Leaves { get; set; }   
         public DbSet<LeaveWorkingProfileManagement> LeaveWorkingProfileManagements { get; set; }
         public DbSet<WorkingProfile> WorkingProfiles { get; set; }
-
         public DbSet<FiscalYear> FiscalYears { get; set; }
+        public DbSet<ShiftWorkingProfile> shiftWorkingProfiles { get; set; }
 
 
         public AppDbContext(DbContextOptions<AppDbContext> dbContextOptions) : base(dbContextOptions)
