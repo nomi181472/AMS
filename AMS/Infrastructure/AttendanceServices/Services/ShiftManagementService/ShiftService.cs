@@ -15,8 +15,9 @@ using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore.Query;
 using AttendanceServices.Services.LeaveService.Models.Response;
 using AttendanceServices.Services.LeaveService.Models;
+using AttendanceServices.Services.ShiftManagementService.Models;
 
-namespace AttendanceServices.Services.ShiftManagementService.Models
+namespace AttendanceServices.Services.ShiftManagementService
 {
     public class ShiftService : IShiftService
     {
@@ -77,11 +78,11 @@ namespace AttendanceServices.Services.ShiftManagementService.Models
             var getterResult = await _unit.shiftRepo.GetSingleAsync(cancellationToken, filter);
 
             ResponseGetShiftWithDetails response;
-            if(getterResult.Status)
+            if (getterResult.Status)
             {
-                if(getterResult.Data != null)
+                if (getterResult.Data != null)
                 {
-                    response = CRTShift.ToResponseWithDetails(getterResult.Data);
+                    response = getterResult.Data.ToResponseWithDetails();
                     return response;
                 }
                 else
@@ -105,12 +106,12 @@ namespace AttendanceServices.Services.ShiftManagementService.Models
             var status = request.Status ?? KConstantCommon.UseNA;
             var setterResult = await _unit.shiftRepo.UpdateOnConditionAsync(
                 // 1st param: matching condition
-                x => x.IsActive==true&&x.Code==request.Code,
+                x => x.IsActive == true && x.Code == request.Code,
                 // 2nd param: set the updated value
-                x=>x.SetProperty(x=>x.Description, request.Description ?? KConstantCommon.UseNA)
-                .SetProperty(x=>x.Status,status)
-                .SetProperty(x=>x.UpdatedBy,userId)
-                .SetProperty(x=>x.UpdatedDate, DateTime.Now)
+                x => x.SetProperty(x => x.Description, request.Description ?? KConstantCommon.UseNA)
+                .SetProperty(x => x.Status, status)
+                .SetProperty(x => x.UpdatedBy, userId)
+                .SetProperty(x => x.UpdatedDate, DateTime.Now)
                 , cancellationToken
             );
 
