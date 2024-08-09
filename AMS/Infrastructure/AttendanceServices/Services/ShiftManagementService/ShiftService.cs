@@ -199,9 +199,9 @@ namespace AttendanceServices.Services.ShiftManagementService
 
         // Functions to be consumed by the other services
 
-        public async Task<Shift> SingleWithoutDetails(string Id, CancellationToken cancellationToken)
+        public async Task<Shift> SingleWithoutDetails(string code, CancellationToken cancellationToken)
         {
-            Expression<Func<Shift, bool>> filter = shift => shift.Id == Id && shift.IsActive == true;
+            Expression<Func<Shift, bool>> filter = shift => shift.Code == code && shift.IsActive == true;
             var getterResult = await  _unit.shiftRepo.GetSingleAsync(cancellationToken, filter);
 
             Shift response;
@@ -214,12 +214,12 @@ namespace AttendanceServices.Services.ShiftManagementService
                 }
                 else
                 {
-                    throw new RecordNotFoundException("Shift does not exist with Id: " + code);
+                    return null;
                 }
             }
             else
             {
-                throw new InvalidOperationException($"An error occurred while processing the request: {getterResult.Message}");
+                return null;
             }
         }
 
