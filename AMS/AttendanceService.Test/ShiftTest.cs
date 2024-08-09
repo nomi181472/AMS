@@ -8,13 +8,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AttendanceServices.Services.ShiftManagementService.Models;
 using AttendanceServices.Services.ShiftManagementService.Models.Request;
 using DA.Models.RepoResultModels;
 using DA.Repositories.CommonRepositories;
 using Microsoft.EntityFrameworkCore.Query;
 using System.Linq.Expressions;
 using AttendanceServices.Services.ShiftManagementService.Models.Response;
+using AttendanceServices.Services.ShiftManagementService;
 
 namespace AttendanceService.Test
 {
@@ -39,7 +39,7 @@ namespace AttendanceService.Test
             mockUnitOfWork.Setup(uow => uow.shiftRepo).Returns(mockShiftRepo.Object);
         }
 
-        [TestCase("WP-001", "Dummy Description", "Dummy Status" , 3, "2024-08-02T08:00:00", "2024-08-02T17:00:00", "anyForNow")]
+        [TestCase("WP-001", "Dummy Description", "Dummy Status" , 3, "08:00:00", "17:00:00", "anyForNow")]
         public void Should_Return_True_When_Shift_Is_Created(string code, string description, string status, int numDays, string timeIn, string timeOut, string userId)
         {
             //Arrange
@@ -52,8 +52,8 @@ namespace AttendanceService.Test
                 Description = description,
                 Status = status,
                 NumDays = numDays,
-                TimeIn = DateTime.Parse(timeIn),
-                TimeOut = DateTime.Parse(timeOut)
+                TimeIn = TimeOnly.Parse(timeIn),
+                TimeOut = TimeOnly.Parse(timeOut)
             });
 
             //Act
@@ -63,7 +63,7 @@ namespace AttendanceService.Test
             Assert.That(result, Is.EqualTo(true));
         }
 
-        [TestCase("WP-001", "Dummy Description", "Dummy Status", 3, "2024-08-02T08:00:00", "2024-08-02T17:00:00", "anyForNow")]
+        [TestCase("WP-001", "Dummy Description", "Dummy Status", 3, "08:00:00", "17:00:00", "anyForNow")]
         public void Should_Return_True_If_Created_Shift_Retrieved(string code, string description, string status, int numDays, string timeIn, string timeOut, string userId)
         {
             //Arrange
@@ -73,8 +73,8 @@ namespace AttendanceService.Test
                 Description = description,
                 Status = status,
                 NumDays = numDays,
-                TimeIn = DateTime.Parse(timeIn),
-                TimeOut = DateTime.Parse(timeOut)
+                TimeIn = TimeOnly.Parse(timeIn),
+                TimeOut = TimeOnly.Parse(timeOut)
             };
 
             initializer.mockMapper.Setup(mapper => mapper.Map<RequestAddShift, Shift>(It.IsAny<RequestAddShift>())).
@@ -84,8 +84,8 @@ namespace AttendanceService.Test
                 Description = description,
                 Status = status,
                 NumDays = numDays,
-                TimeIn = DateTime.Parse(timeIn),
-                TimeOut = DateTime.Parse(timeOut)
+                TimeIn = TimeOnly.Parse(timeIn),
+                TimeOut = TimeOnly.Parse(timeOut)
             });
 
             var result = shiftService.AddShift(requestAddShift, userId, initializer.token).Result;

@@ -2,13 +2,14 @@
 using AttendanceServices.Services.AllowanceService.Models.Response;
 using AttendanceServices.Services.ShiftManagementService.Models.Request;
 using AttendanceServices.Services.ShiftManagementService.Models.Response;
+using DA.Models.DomainModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AttendanceServices.Services.ShiftManagementService.Models
+namespace AttendanceServices.Services.ShiftManagementService
 {
     public interface IShiftService
     {
@@ -21,5 +22,6 @@ namespace AttendanceServices.Services.ShiftManagementService.Models
         Task<List<ResponseGetShiftUpdated>> UpdateShift(RequestUpdateShift request, string userId, CancellationToken cancellationToken);
 
         Task<List<ResponseGetShiftDeleted>> DeleteShift(RequestDeleteShift request, string userId, CancellationToken cancellationToken);
+        Task<Shift> SingleWithoutDetails(string code, CancellationToken cancellationToken);
     }
 }

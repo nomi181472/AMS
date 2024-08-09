@@ -7,6 +7,7 @@ using DA.Models.DomainModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -84,6 +85,33 @@ namespace AttendanceServices.Services.WorkingProfileService
                 workingProfileResponseList.Add(workingProfileResponse);
             }
             return workingProfileResponseList;
+        }
+
+        // This functions are to be consumed by other services
+
+        public async Task<WorkingProfile> SingleWithoutDetails(string workingProfileCode, CancellationToken cancellationToken)
+        {
+            Expression<Func<WorkingProfile, bool>> filter = workingprofile => workingprofile.Code == workingProfileCode && workingprofile.IsActive == true;
+            var getterResult = await _unitOfWork.workingProfileRepo.GetSingleAsync(cancellationToken, filter);
+
+            
+            WorkingProfile response;
+            if (getterResult.Status)
+            {
+                if (getterResult.Data != null)
+                {
+                    response = getterResult.Data;
+                    return response;
+                }
+                else
+                {
+                    throw new RecordNotFoundException("Working Profile does not exist with Code: " + workingProfileCode);
+                }
+            }
+            else
+            {
+                throw new InvalidOperationException($"An error occurred while processing the request: {getterResult.Message}");
+            }
         }
     }
 }

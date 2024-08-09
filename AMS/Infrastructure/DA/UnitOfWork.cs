@@ -17,14 +17,13 @@ namespace DA
         }
 
         public IGenericRepository<Allowance, string> allowanceRepo => new GenericRepository<Allowance, string>(_db);
-
         public IGenericRepository<WorkingProfile, string> workingProfileRepo => new GenericRepository<WorkingProfile, string>(_db);
-
         public IGenericRepository<Leave, string> leaveRepo => new GenericRepository<Leave,string>(_db);
-
         public IGenericRepository<Shift, string> shiftRepo => new GenericRepository<Shift, string>(_db);
-
         public IGenericRepository<FiscalYear, string> fiscalYearRepo => new GenericRepository<FiscalYear, string>(_db);
+        public IGenericRepository<Deduction,string> deductionRepo => new GenericRepository<Deduction,string>(_db);
+        public IGenericRepository<ShiftWorkingProfile, string> shiftWorkingProfileRepo => new GenericRepository<ShiftWorkingProfile, string>(_db);
+
         public void Commit()
         {
             _db.SaveChanges();
@@ -33,7 +32,6 @@ namespace DA
         {
             await _db.SaveChangesAsync(cancellationToken);
         }
-
         public async Task CommitAsync()
         {
             await _db.SaveChangesAsync();
@@ -45,12 +43,6 @@ namespace DA
             GC.SuppressFinalize(this);
 
         }
-
-
-
-
-
-
 
     }
 }
