@@ -197,5 +197,31 @@ namespace AttendanceServices.Services.ShiftManagementService
             return response;
         }
 
+        // Functions to be consumed by the other services
+
+        public async Task<Shift> SingleWithoutDetails(string Id, CancellationToken cancellationToken)
+        {
+            Expression<Func<Shift, bool>> filter = shift => shift.Id == Id && shift.IsActive == true;
+            var getterResult = await  _unit.shiftRepo.GetSingleAsync(cancellationToken, filter);
+
+            Shift response;
+            if (getterResult.Status)
+            {
+                if (getterResult.Data != null)
+                {
+                    response = getterResult.Data;
+                    return response;
+                }
+                else
+                {
+                    throw new RecordNotFoundException("Shift does not exist with Id: " + code);
+                }
+            }
+            else
+            {
+                throw new InvalidOperationException($"An error occurred while processing the request: {getterResult.Message}");
+            }
+        }
+
     }
 }

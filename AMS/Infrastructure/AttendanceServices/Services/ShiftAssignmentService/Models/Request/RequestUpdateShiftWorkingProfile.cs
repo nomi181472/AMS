@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AttendanceServices.Services.ShiftAssignmentService.Request
+namespace AttendanceServices.Services.ShiftAssignmentService.Models.Request
 {
     public class RequestUpdateShiftWorkingProfile
     {
