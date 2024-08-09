@@ -30,10 +30,10 @@ namespace AttendanceService.Controllers
         [ProducesResponseType(HTTPStatusCode500.InternalServerError)]
         [Route(nameof(AddShiftAssignment))]
         [HttpPost]
-        public async Task<IActionResult> AddShiftAssignment(RequestAddShiftWorkingProfile request, CancellationToken cancellationToken)
+        public async Task<IActionResult> AddShiftAssignment(RequestAssignShiftToWorkingProfile request, CancellationToken cancellationToken)
         {
             int statusCode = HTTPStatusCode200.Ok;
-            string message = "Success, Shift added successfully";
+            string message = "Success, Shift assigned successfully";
 
             try
             {
@@ -41,19 +41,19 @@ namespace AttendanceService.Controllers
                 var result = await _shiftAssignmentService.AddShiftAssignment(request, userId, cancellationToken);
                 return ApiResponseHelper.Convert(true, true, message, statusCode, result);
             }
-            catch (RecordNotFoundException ex)
+            catch (UnknownException ex)
             {
                 _logger.LogError(ex.Message, ex);
                 statusCode = (int)HttpStatusCode.NotFound;
-                message = "Shift Assignment not found.";
-                return ApiResponseHelper.Convert(false, false, message, (int)statusCode, null);
+                message = "Already Assigned";
+                return ApiResponseHelper.Convert(false, false, message, (int)statusCode, null,ex);
             }
             catch (Exception e)
             {
                 statusCode = HTTPStatusCode500.InternalServerError;
                 message = ExceptionMessage.SWW;
                 _logger.LogError(message, e);
-                return ApiResponseHelper.Convert(false, false, message, statusCode, null);
+                return ApiResponseHelper.Convert(false, false, message, statusCode, null, e);
             }
         }
     }
