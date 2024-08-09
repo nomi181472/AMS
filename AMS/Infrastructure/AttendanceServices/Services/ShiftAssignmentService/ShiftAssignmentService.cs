@@ -4,10 +4,14 @@ using AttendanceServices.Services.ShiftAssignmentService.Models;
 using AttendanceServices.Services.ShiftAssignmentService.Models.Request;
 using AttendanceServices.Services.ShiftAssignmentService.Models.Response;
 using AttendanceServices.Services.ShiftManagementService;
+using AttendanceServices.Services.WorkingProfileService;
 using DA;
+using DA.Models.DomainModels;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,36 +20,56 @@ namespace AttendanceServices.Services.ShiftAssignmentService
     public class ShiftAssignmentService : IShiftAssignmentService
     {
         IUnitOfWork _unit;
-        ShiftService _shiftService;
-        public ShiftAssignmentService(IUnitOfWork unitOfWork, ShiftService shiftService)
+        private readonly IShiftService _shiftService;
+        private readonly IWorkingProfileService _workingProfileService;
+        public ShiftAssignmentService(IUnitOfWork unitOfWork, IShiftService shiftService, IWorkingProfileService workingProfileService)
         {
             _unit = unitOfWork;
             _shiftService = shiftService;
+            _workingProfileService = workingProfileService;
         }
 
-        public async Task<bool> AddShiftAssignment(RequestAddShiftWorkingProfile request, string userId, CancellationToken cancellationToken)
+        public async Task<bool> AddShiftAssignment(RequestAssignShiftToWorkingProfile request, string userId, CancellationToken cancellationToken)
         {
+           
+
             if (request == null)
             {
                 throw new UnknownException("The request cannot be null.");
             }
 
-            var entity = request.ToDomain();
-
-            if (entity == null)
-            {
-                throw new UnknownException("The request is invalid and could not be converted to a domain entity.");
-            }
-
-            var searchedShift = _shiftService.SingleWithoutDetails(request.ShiftId , cancellationToken);
+            var searchedShift =await _shiftService.SingleWithoutDetails(request.ShiftCode! , cancellationToken);
             
             if(searchedShift == null)
             {
                 throw new UnknownException("Shift does not exist with that code");
             }
 
-            // do same validation for WorkingProfile
+            var searchedWorkingProfile = await _workingProfileService.SingleWithoutDetails(request.WorkingProfileCode! , cancellationToken);
 
+            if(searchedWorkingProfile == null)
+            {
+                throw new UnknownException("Working Profile Does not exist with that code");
+            }
+            RequestAddShiftWorkingProfile obj = new RequestAddShiftWorkingProfile
+            {
+                ShiftId = searchedShift.Id,
+                WorkingProfileId = searchedWorkingProfile.Id
+
+            };
+            var entity = obj.ToDomain();
+            if (entity == null)
+            {
+                throw new UnknownException("The request is invalid and could not be converted to a domain entity.");
+            }
+
+            Expression<Func<ShiftWorkingProfile, bool>> filter = swp => swp.WorkingProfileId == searchedWorkingProfile.Id && swp.ShiftId == searchedShift.Id;
+            var getterResult = await _unit.shiftWorkingProfileRepo.GetSingleAsync(cancellationToken, filter);
+            if (getterResult.Data != null)
+            {
+                throw new UnknownException("Shift with code: " + request.ShiftCode + " is already assigned to Working Profile with code:" + searchedWorkingProfile.Code);
+
+            }
             entity.UpdatedBy = userId;
             entity.CreatedDate = DateTime.Now;
             entity.UpdatedDate = DateTime.Now;
@@ -58,8 +82,9 @@ namespace AttendanceServices.Services.ShiftAssignmentService
             return true;
         }
 
-        public Task<List<ResponseGetShiftWorkingProfileWithDetails>> ListWithDetails(CancellationToken cancellationToken)
+        public async Task<List<ResponseGetShiftWorkingProfileWithDetails>> ListWithDetails(CancellationToken cancellationToken)
         {
+           
             return null;
         }
 

@@ -12,7 +12,7 @@ namespace AttendanceServices.Services.ShiftAssignmentService
 {
     public interface IShiftAssignmentService
     {
-        Task<bool> AddShiftAssignment(RequestAddShiftWorkingProfile request, string userId, CancellationToken cancellationToken);
+        Task<bool> AddShiftAssignment(RequestAssignShiftToWorkingProfile request, string userId, CancellationToken cancellationToken);
 
         Task<List<ResponseGetShiftWorkingProfileWithDetails>> ListWithDetails(CancellationToken cancellationToken);
 
