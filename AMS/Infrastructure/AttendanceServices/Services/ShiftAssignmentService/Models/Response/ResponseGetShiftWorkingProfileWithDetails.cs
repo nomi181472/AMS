@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AttendanceServices.Services.ShiftAssignmentService.Response
+namespace AttendanceServices.Services.ShiftAssignmentService.Models.Response
 {
     public class ResponseGetShiftWorkingProfileWithDetails : CompleteTrackingFields
     {
