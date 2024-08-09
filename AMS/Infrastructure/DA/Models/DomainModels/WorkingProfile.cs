@@ -18,7 +18,7 @@ namespace DA.Models.DomainModels
 
         //fk
         
-      
+        
 
         public virtual  ICollection<AllowanceWorkingProfileManagement> AllowanceWorkingProfileManagements { get; set; } =new List<AllowanceWorkingProfileManagement>();
         public virtual  ICollection<LeaveWorkingProfileManagement> LeaveWorkingProfileManagements { get;  set; }=new 
@@ -28,7 +28,5 @@ namespace DA.Models.DomainModels
         public virtual FiscalYear? FiscalYear { get; set; }
 
         public virtual ICollection<ShiftDeductionScheduler> ShiftDeductionScheduler { get; set; } = new List<ShiftDeductionScheduler>();
-
-        public virtual ICollection<ShiftWorkingProfile> ShiftWorkingProfile { get; set; } = new List<ShiftWorkingProfile>();
     }
 }

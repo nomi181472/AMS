@@ -1,7 +1,7 @@
 ﻿using AttendanceService.Common;
 using AttendanceServices.CustomExceptions.Common;
 using AttendanceServices.Services.ShiftAssignmentService;
-using AttendanceServices.Services.ShiftAssignmentService.Models.Request;
+using AttendanceServices.Services.ShiftAssignmentService.Request;
 using AttendanceServices.Services.ShiftManagementService.Models;
 using AttendanceServices.Services.ShiftManagementService.Models.Request;
 using Logger;

@@ -17,8 +17,8 @@ namespace AttendanceServices.Services.ShiftManagementService.Models.Request
 
         public int NumDays { get; set; } = 0;
 
-        public TimeOnly TimeIn = TimeOnly.MinValue;
+        public DateTime TimeIn = DateTime.MinValue;
 
-        public TimeOnly TimeOut = TimeOnly.MinValue;
+        public DateTime TimeOut = DateTime.MinValue;
     }
 }

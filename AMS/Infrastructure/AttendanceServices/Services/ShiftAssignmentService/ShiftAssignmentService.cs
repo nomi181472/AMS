@@ -1,9 +1,6 @@
-﻿using AttendanceServices.CustomExceptions.Common;
-using AttendanceServices.Services.DeductionService.Models;
-using AttendanceServices.Services.ShiftAssignmentService.Models;
-using AttendanceServices.Services.ShiftAssignmentService.Models.Request;
-using AttendanceServices.Services.ShiftAssignmentService.Models.Response;
-using AttendanceServices.Services.ShiftManagementService;
+﻿using AttendanceServices.Services.DeductionService.Models;
+using AttendanceServices.Services.ShiftAssignmentService.Request;
+using AttendanceServices.Services.ShiftAssignmentService.Response;
 using DA;
 using System;
 using System.Collections.Generic;
@@ -16,35 +13,24 @@ namespace AttendanceServices.Services.ShiftAssignmentService
     public class ShiftAssignmentService : IShiftAssignmentService
     {
         IUnitOfWork _unit;
-        ShiftService _shiftService;
-        public ShiftAssignmentService(IUnitOfWork unitOfWork, ShiftService shiftService)
+        public ShiftAssignmentService(IUnitOfWork unitOfWork)
         {
             _unit = unitOfWork;
-            _shiftService = shiftService;
         }
 
         public async Task<bool> AddShiftAssignment(RequestAddShiftWorkingProfile request, string userId, CancellationToken cancellationToken)
         {
             if (request == null)
             {
-                throw new UnknownException("The request cannot be null.");
+                throw new ArgumentNullException(nameof(request), "The request cannot be null.");
             }
 
             var entity = request.ToDomain();
 
             if (entity == null)
             {
-                throw new UnknownException("The request is invalid and could not be converted to a domain entity.");
+                throw new ArgumentException("The request is invalid and could not be converted to a domain entity.", nameof(request));
             }
-
-            var searchedShift = _shiftService.SingleWithoutDetails(request.ShiftId , cancellationToken);
-            
-            if(searchedShift == null)
-            {
-                throw new UnknownException("Shift does not exist with that code");
-            }
-
-            // do same validation for WorkingProfile
 
             entity.UpdatedBy = userId;
             entity.CreatedDate = DateTime.Now;

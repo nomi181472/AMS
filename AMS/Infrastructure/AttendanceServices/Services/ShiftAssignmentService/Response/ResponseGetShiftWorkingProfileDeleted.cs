@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AttendanceServices.Services.ShiftAssignmentService.Models.Response
+namespace AttendanceServices.Services.ShiftAssignmentService.Response
 {
-    public class ResponseGetShiftWorkingProfileUpdated
+    public class ResponseGetShiftWorkingProfileDeleted
     {
 
     }

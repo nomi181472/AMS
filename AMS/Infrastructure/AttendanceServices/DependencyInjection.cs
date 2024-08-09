@@ -1,9 +1,7 @@
 ﻿
 using AttendanceServices.Services.AllowanceService;
 using AttendanceServices.Services.DeductionService;
-using AttendanceServices.Services.FiscalYearService;
 using AttendanceServices.Services.LeaveService;
-using AttendanceServices.Services.ShiftAssignmentService;
 using AttendanceServices.Services.ShiftManagementService;
 using AttendanceServices.Services.WorkingProfileService;
 using DA;
@@ -36,8 +34,6 @@ public static class DependencyInjection
         services.TryAddTransient<IWorkingProfileService, WorkingProfileService>();
         services.TryAddTransient<ILeaveService,LeaveService>();
         services.TryAddTransient<IDeductionService, DeductionService>();
-        services.TryAddTransient<IFiscalYearService, FiscalYearService>();
-        services.TryAddTransient<IShiftAssignmentService, ShiftAssignmentService>();
 
 
 

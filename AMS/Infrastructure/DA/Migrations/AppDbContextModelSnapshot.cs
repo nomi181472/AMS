@@ -363,11 +363,11 @@ namespace DA.Migrations
                     b.Property<string>("Status")
                         .HasColumnType("text");
 
-                    b.Property<TimeOnly?>("TimeIn")
-                        .HasColumnType("time without time zone");
+                    b.Property<DateTime?>("TimeIn")
+                        .HasColumnType("timestamp with time zone");
 
-                    b.Property<TimeOnly?>("TimeOut")
-                        .HasColumnType("time without time zone");
+                    b.Property<DateTime?>("TimeOut")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("UpdatedBy")
                         .IsRequired()
@@ -424,46 +424,6 @@ namespace DA.Migrations
                     b.HasIndex("WorkingProfileId");
 
                     b.ToTable("ShiftDeductionSchedulers");
-                });
-
-            modelBuilder.Entity("DA.Models.DomainModels.ShiftWorkingProfile", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("text");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("IsArchived")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("ShiftId")
-                        .HasColumnType("text");
-
-                    b.Property<string>("UpdatedBy")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("WorkingProfileId")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ShiftId");
-
-                    b.HasIndex("WorkingProfileId");
-
-                    b.ToTable("shiftWorkingProfiles");
                 });
 
             modelBuilder.Entity("DA.Models.DomainModels.WorkingProfile", b =>
@@ -570,21 +530,6 @@ namespace DA.Migrations
                     b.Navigation("WorkingProfile");
                 });
 
-            modelBuilder.Entity("DA.Models.DomainModels.ShiftWorkingProfile", b =>
-                {
-                    b.HasOne("DA.Models.DomainModels.Shift", "Shift")
-                        .WithMany("ShiftWorkingProfile")
-                        .HasForeignKey("ShiftId");
-
-                    b.HasOne("DA.Models.DomainModels.WorkingProfile", "WorkingProfile")
-                        .WithMany("ShiftWorkingProfile")
-                        .HasForeignKey("WorkingProfileId");
-
-                    b.Navigation("Shift");
-
-                    b.Navigation("WorkingProfile");
-                });
-
             modelBuilder.Entity("DA.Models.DomainModels.WorkingProfile", b =>
                 {
                     b.HasOne("DA.Models.DomainModels.FiscalYear", "FiscalYear")
@@ -617,8 +562,6 @@ namespace DA.Migrations
             modelBuilder.Entity("DA.Models.DomainModels.Shift", b =>
                 {
                     b.Navigation("ShiftDeductionScheduler");
-
-                    b.Navigation("ShiftWorkingProfile");
                 });
 
             modelBuilder.Entity("DA.Models.DomainModels.WorkingProfile", b =>
@@ -628,8 +571,6 @@ namespace DA.Migrations
                     b.Navigation("LeaveWorkingProfileManagements");
 
                     b.Navigation("ShiftDeductionScheduler");
-
-                    b.Navigation("ShiftWorkingProfile");
                 });
 #pragma warning restore 612, 618
         }

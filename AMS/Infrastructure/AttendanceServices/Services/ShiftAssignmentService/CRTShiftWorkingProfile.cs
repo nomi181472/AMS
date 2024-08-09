@@ -1,5 +1,5 @@
-﻿using AttendanceServices.Services.ShiftAssignmentService.Models.Request;
-using AttendanceServices.Services.ShiftAssignmentService.Models.Response;
+﻿using AttendanceServices.Services.ShiftAssignmentService.Request;
+using AttendanceServices.Services.ShiftAssignmentService.Response;
 using AttendanceServices.Services.ShiftManagementService.Models.Request;
 using AttendanceServices.Services.ShiftManagementService.Models.Response;
 using DA.Models.DomainModels;
@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AttendanceServices.Services.ShiftAssignmentService.Models
+namespace AttendanceServices.Services.ShiftAssignmentService
 {
     public static class CRTShiftWorkingProfile
     {
