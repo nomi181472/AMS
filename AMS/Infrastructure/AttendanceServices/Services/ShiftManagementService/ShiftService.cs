@@ -62,7 +62,10 @@ namespace AttendanceServices.Services.ShiftManagementService
             {
                 foreach (var record in result.Data)
                 {
-                    response.Add(record.ToResponseWithDetails());
+                    if(record.IsActive == true)
+                    {
+                        response.Add(record.ToResponseWithDetails());
+                    }
                 }
                 return response;
             }

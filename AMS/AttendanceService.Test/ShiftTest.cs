@@ -15,6 +15,8 @@ using Microsoft.EntityFrameworkCore.Query;
 using System.Linq.Expressions;
 using AttendanceServices.Services.ShiftManagementService.Models.Response;
 using AttendanceServices.Services.ShiftManagementService;
+using System.Threading;
+using System.Timers;
 
 namespace AttendanceService.Test
 {
@@ -24,23 +26,16 @@ namespace AttendanceService.Test
         private ShiftService shiftService;
         private UnitOfWork unitOfWork;
 
-        private Mock<IUnitOfWork> mockUnitOfWork;
-        private Mock<IGenericRepository<Shift, string>> mockShiftRepo;
-
         [SetUp]
         public void Setup()
         {
             initializer = new Initializer();
             unitOfWork = new UnitOfWork(initializer._dbContext);
             shiftService = new ShiftService(unitOfWork);
-
-            mockShiftRepo = new Mock<IGenericRepository<Shift,string>>();
-            mockUnitOfWork = new Mock<IUnitOfWork>();
-            mockUnitOfWork.Setup(uow => uow.shiftRepo).Returns(mockShiftRepo.Object);
         }
 
         [TestCase("WP-001", "Dummy Description", "Dummy Status" , 3, "08:00:00", "17:00:00", "anyForNow")]
-        public void Should_Return_True_When_Shift_Is_Created(string code, string description, string status, int numDays, string timeIn, string timeOut, string userId)
+        public void AddShift_Should_Return_True_When_Shift_Is_Created(string code, string description, string status, int numDays, string timeIn, string timeOut, string userId)
         {
             //Arrange
             RequestAddShift requestAddShift = new RequestAddShift();
@@ -64,7 +59,7 @@ namespace AttendanceService.Test
         }
 
         [TestCase("WP-001", "Dummy Description", "Dummy Status", 3, "08:00:00", "17:00:00", "anyForNow")]
-        public void Should_Return_True_If_Created_Shift_Retrieved(string code, string description, string status, int numDays, string timeIn, string timeOut, string userId)
+        public void ListWithDetails_Should_Return_True_If_Created_Shift_Retrieved(string code, string description, string status, int numDays, string timeIn, string timeOut, string userId)
         {
             //Arrange
             RequestAddShift requestAddShift = new RequestAddShift
@@ -98,101 +93,124 @@ namespace AttendanceService.Test
             Assert.That(code, Is.EqualTo(retrievedShift.Code));
         }
 
-        [Test]
-        public async Task Should_Return_Response_When_Update_Succeeds()
+        [TestCase("WP-001", "Updated Description", "Updated Status", 4, "09:00:00", "18:00:00", "anyForNow")]
+        public void UpdateShift_Should_Return_Response_When_Update_Succeeds(string code, string description, string status, int numDays, string timeIn, string timeOut, string userId)
         {
             // Arrange
-            var request = new RequestUpdateShift
+            RequestAddShift requestAddShift = new RequestAddShift
             {
-                Code = "SH-001",
-                Description = "Updated Description",
-                Status = "Updated Status"
+                Code = code,
+                Description = description,
+                Status = status,
+                NumDays = numDays,
+                TimeIn = TimeOnly.Parse(timeIn),
+                TimeOut = TimeOnly.Parse(timeOut)
             };
-            var userId = "anyUserId";
 
-            Expression<Func<Shift, bool>> filter = x => x.IsActive && x.Code == request.Code;
-            Expression<Func<SetPropertyCalls<Shift>, SetPropertyCalls<Shift>>> setPropertyCalls = x => x
-                .SetProperty(s => s.Description, request.Description ?? AttendanceServices.EnumsAndConstants.Constant.KConstantCommon.UseNA)
-                .SetProperty(s => s.Status, request.Status ?? AttendanceServices.EnumsAndConstants.Constant.KConstantCommon.UseNA)
-                .SetProperty(s => s.UpdatedBy, userId)
-                .SetProperty(s => s.UpdatedDate, DateTime.Now);
+            initializer.mockMapper.Setup(mapper => mapper.Map<RequestAddShift, Shift>(It.IsAny<RequestAddShift>())).
+            Returns(new Shift
+            {
+                Code = code,
+                Description = description,
+                Status = status,
+                NumDays = numDays,
+                TimeIn = TimeOnly.Parse(timeIn),
+                TimeOut = TimeOnly.Parse(timeOut)
+            });
 
-            mockShiftRepo.Setup(repo => repo.UpdateOnConditionAsync(
-                It.IsAny<Expression<Func<Shift, bool>>>(),
-                It.IsAny<Expression<Func<SetPropertyCalls<Shift>, SetPropertyCalls<Shift>>>>(),
-                It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new SetterResult { Message = "Success", Result = true, IsException = false });
+            var existingShift = shiftService.AddShift(requestAddShift, userId, initializer.token).Result;
 
-            var mockUnitOfWork = new Mock<IUnitOfWork>();
-            mockUnitOfWork.Setup(uow => uow.shiftRepo).Returns(mockShiftRepo.Object);
-            var shiftService = new ShiftService(mockUnitOfWork.Object);
+            RequestUpdateShift updateRequest = new RequestUpdateShift
+            {
+                Code = "updatedCode",
+                Description = description,
+                Status = status,
+                NumDays = numDays,
+                TimeIn = TimeOnly.Parse(timeIn),
+                TimeOut = TimeOnly.Parse(timeOut)
+            };
 
             // Act
-            var result = await shiftService.UpdateShift(request, userId, CancellationToken.None);
+            var result = shiftService.UpdateShift(updateRequest, userId, initializer.token).Result;
 
             // Assert
-            Assert.That(result.First().Code, Is.EqualTo(request.Code));
+            Assert.That(result.First().Code, Is.EqualTo(updateRequest.Code));
         }
 
-        [Test]
-        public async Task DeleteShift_Should_Return_Response_When_Delete_Succeeds()
+
+        [TestCase("WP-001", "Dummy Description", "Dummy Status", 3, "08:00:00", "17:00:00", "anyForNow")]
+        public void DeleteShift_Should_Return_Response_When_Delete_Succeeds(string code, string description, string status, int numDays, string timeIn, string timeOut, string userId)
         {
             // Arrange
-            var request = new RequestDeleteShift
+            RequestAddShift requestAddShift = new RequestAddShift
             {
-                Code = "SH-001"
-            };
-            var userId = "anyUserId";
-
-            var shift = new Shift
-            {
-                Code = request.Code,
-                IsActive = true
+                Code = code,
+                Description = description,
+                Status = status,
+                NumDays = numDays,
+                TimeIn = TimeOnly.Parse(timeIn),
+                TimeOut = TimeOnly.Parse(timeOut)
             };
 
-            mockShiftRepo.Setup(repo => repo.GetSingleAsync(
-                It.IsAny<CancellationToken>(),
-                It.IsAny<Expression<Func<Shift, bool>>>(),
-                It.IsAny<string>() // Explicitly include the optional parameter with a default value
-            )).ReturnsAsync(new GetterResult<Shift> { Data = shift, Status = true });
+            initializer.mockMapper.Setup(mapper => mapper.Map<RequestAddShift, Shift>(It.IsAny<RequestAddShift>())).
+            Returns(new Shift
+            {
+                Code = code,
+                Description = description,
+                Status = status,
+                NumDays = numDays,
+                TimeIn = TimeOnly.Parse(timeIn),
+                TimeOut = TimeOnly.Parse(timeOut)
+            });
 
-            mockShiftRepo.Setup(repo => repo.UpdateAsync(It.IsAny<Shift>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new SetterResult { Result = true, Message = "Success", IsException = false });
+            var existingShift = shiftService.AddShift(requestAddShift, userId, initializer.token).Result;
 
-            var mockUnitOfWork = new Mock<IUnitOfWork>();
-            mockUnitOfWork.Setup(uow => uow.shiftRepo).Returns(mockShiftRepo.Object);
-            var shiftService = new ShiftService(mockUnitOfWork.Object);
+            RequestDeleteShift deleteRequest = new RequestDeleteShift
+            {
+                Code = code
+            };
 
             // Act
-            var result = await shiftService.DeleteShift(request, userId, CancellationToken.None);
+            var result = shiftService.DeleteShift(deleteRequest, userId, initializer.token).Result;
 
             // Assert
-            Assert.That(result.First().Code, Is.EqualTo(request.Code));
+            Assert.That(result.First().Code, Is.EqualTo(deleteRequest.Code));
         }
 
-        [Test]
-        public async Task SingleWithDetails_Should_Return_ShiftDetails_When_ShiftExists()
+
+        [TestCase("WP-001", "Dummy Description", "Dummy Status", 3, "08:00:00", "17:00:00", "anyForNow")]
+        public void SingleWithDetails_Should_Return_ShiftDetails_When_ShiftExists(string code, string description, string status, int numDays, string timeIn, string timeOut, string userId)
         {
-            string code = "myShift";
-            var shift = new Shift { Code = code, IsActive = true };
-            var shiftDetails = new Shift { Code = code, IsActive = true };
+            //Arrange
+            RequestAddShift requestAddShift = new RequestAddShift
+            {
+                Code = code,
+                Description = description,
+                Status = status,
+                NumDays = numDays,
+                TimeIn = TimeOnly.Parse(timeIn),
+                TimeOut = TimeOnly.Parse(timeOut)
+            };
 
-            mockShiftRepo.Setup(repo => repo.GetSingleAsync(
-                It.IsAny<CancellationToken>(),
-                It.IsAny<Expression<Func<Shift, bool>>>(),
-                It.IsAny<string>()
-            )).ReturnsAsync(new GetterResult<Shift> { Data = shift, Status = true });
+            initializer.mockMapper.Setup(mapper => mapper.Map<RequestAddShift, Shift>(It.IsAny<RequestAddShift>())).
+            Returns(new Shift
+            {
+                Code = code,
+                Description = description,
+                Status = status,
+                NumDays = numDays,
+                TimeIn = TimeOnly.Parse(timeIn),
+                TimeOut = TimeOnly.Parse(timeOut)
+            });
 
-            mockShiftRepo.Setup(repo => repo.GetByIdAsync(
-                It.IsAny<string>(),
-                It.IsAny<CancellationToken>()
-            )).ReturnsAsync(new GetterResult<Shift> { Data = shiftDetails, Status = true });
+            var result = shiftService.AddShift(requestAddShift, userId, initializer.token).Result;
 
             // Act
-            var result = await shiftService.SingleWithDetails(code, CancellationToken.None);
+            var shift = shiftService.ListWithDetails(CancellationToken.None).Result;
+            var retrievedShift = shift.FirstOrDefault(s => s.Code == code);
 
             // Assert
-            Assert.That(result.Code, Is.EqualTo(shift.Code));
+            Assert.That(code, Is.EqualTo(retrievedShift.Code));
         }
     }
 }
