@@ -179,7 +179,7 @@ namespace AttendanceService.Test
 
 
         [TestCase("WP-001", "Dummy Description", "Dummy Status", 3, "08:00:00", "17:00:00", "anyForNow")]
-        public async Task SingleWithDetails_Should_Return_ShiftDetails_When_ShiftExists(string code, string description, string status, int numDays, string timeIn, string timeOut, string userId)
+        public void SingleWithDetails_Should_Return_ShiftDetails_When_ShiftExists(string code, string description, string status, int numDays, string timeIn, string timeOut, string userId)
         {
             //Arrange
             RequestAddShift requestAddShift = new RequestAddShift
