@@ -4,6 +4,7 @@ using System.Text.Json;
 using Logger;
 using Microsoft.OpenApi.Models;
 using AttendanceService.Common.Constant;
+using CSV_File_Reader;
 namespace AttendanceService
 {
     public static class DependencyInjection
@@ -20,9 +21,8 @@ namespace AttendanceService
         }
         public static IServiceCollection AddHelpers( this IServiceCollection services, IConfiguration configuration)
         {
-
-            services
-                .AddCustomLogger(configuration);
+            services.AddCustomLogger(configuration);
+            services.AddCsvReader(configuration);
                 
             return services;
         }

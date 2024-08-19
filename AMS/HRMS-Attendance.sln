@@ -23,7 +23,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CustomHTTP", "Utility\Custo
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTest", "UnitTest", "{E8D1ADAD-83E6-47EC-99B6-D0152E2E84C1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AttendanceService.Test", "AttendanceService.Test\AttendanceService.Test.csproj", "{C61D8120-EEA1-4FED-ACB8-D00220503511}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AttendanceService.Test", "AttendanceService.Test\AttendanceService.Test.csproj", "{C61D8120-EEA1-4FED-ACB8-D00220503511}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSV_File_Reader", "CSV_File_Reader\CSV_File_Reader.csproj", "{716CBA4D-7536-4805-9BB0-33237EED4DC5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,6 +61,10 @@ Global
 		{C61D8120-EEA1-4FED-ACB8-D00220503511}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C61D8120-EEA1-4FED-ACB8-D00220503511}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C61D8120-EEA1-4FED-ACB8-D00220503511}.Release|Any CPU.Build.0 = Release|Any CPU
+		{716CBA4D-7536-4805-9BB0-33237EED4DC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{716CBA4D-7536-4805-9BB0-33237EED4DC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{716CBA4D-7536-4805-9BB0-33237EED4DC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{716CBA4D-7536-4805-9BB0-33237EED4DC5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -71,6 +77,7 @@ Global
 		{A9D8AFD6-43D2-4506-A64E-61CCF83F51B1} = {4FDB30F3-FC0F-4A2E-B0EA-3052CF915808}
 		{053455BA-9CC2-4910-BC19-0A2245A0E8D2} = {4FDB30F3-FC0F-4A2E-B0EA-3052CF915808}
 		{C61D8120-EEA1-4FED-ACB8-D00220503511} = {E8D1ADAD-83E6-47EC-99B6-D0152E2E84C1}
+		{716CBA4D-7536-4805-9BB0-33237EED4DC5} = {4FDB30F3-FC0F-4A2E-B0EA-3052CF915808}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BB0F32EC-EE66-4564-9BE0-D1C3FFFB77FE}
