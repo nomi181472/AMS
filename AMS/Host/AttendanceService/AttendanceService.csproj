@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\CSV_File_Reader\CSV_File_Reader.csproj" />
     <ProjectReference Include="..\..\Infrastructure\AttendanceServices\AttendanceServices.csproj" />
     <ProjectReference Include="..\..\Utility\CustomHTTP\CustomHTTP.csproj" />
     <ProjectReference Include="..\..\Utility\Logger\Logger.csproj" />
