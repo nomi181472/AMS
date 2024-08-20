@@ -11,4 +11,8 @@
     <ProjectReference Include="..\DA\DA.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Services\ShiftDeductionSchedulerManagement\Models\Response\" />
+  </ItemGroup>
+
 </Project>

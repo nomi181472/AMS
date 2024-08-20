@@ -4,6 +4,7 @@ using AttendanceServices.Services.DeductionService;
 using AttendanceServices.Services.FiscalYearService;
 using AttendanceServices.Services.LeaveService;
 using AttendanceServices.Services.ShiftAssignmentService;
+using AttendanceServices.Services.ShiftDeductionSchedulerManagement;
 using AttendanceServices.Services.ShiftManagementService;
 using AttendanceServices.Services.WorkingProfileService;
 using DA;
@@ -38,6 +39,7 @@ public static class DependencyInjection
         services.TryAddTransient<IDeductionService, DeductionService>();
         services.TryAddTransient<IFiscalYearService, FiscalYearService>();
         services.TryAddTransient<IShiftAssignmentService, ShiftAssignmentService>();
+        services.TryAddTransient<IShiftDeductionSchedulerService, ShiftDeductionSchedulerService>();
 
 
 

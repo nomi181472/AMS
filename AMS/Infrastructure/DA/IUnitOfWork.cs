@@ -18,6 +18,7 @@ namespace DA
         IGenericRepository<Leave, string> leaveRepo { get; }
         IGenericRepository<Deduction,string> deductionRepo { get; }
         IGenericRepository<ShiftWorkingProfile, string> shiftWorkingProfileRepo { get; }
+        IGenericRepository<ShiftDeductionScheduler, string> shiftDeductionSchedulerRepo { get; }
         void Commit();
         Task CommitAsync(CancellationToken cancellationToken);
         Task CommitAsync();

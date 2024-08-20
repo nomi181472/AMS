@@ -23,6 +23,7 @@ namespace DA
         public IGenericRepository<FiscalYear, string> fiscalYearRepo => new GenericRepository<FiscalYear, string>(_db);
         public IGenericRepository<Deduction,string> deductionRepo => new GenericRepository<Deduction,string>(_db);
         public IGenericRepository<ShiftWorkingProfile, string> shiftWorkingProfileRepo => new GenericRepository<ShiftWorkingProfile, string>(_db);
+        public IGenericRepository<ShiftDeductionScheduler, string> shiftDeductionSchedulerRepo => new GenericRepository<ShiftDeductionScheduler, string>(_db);
 
         public void Commit()
         {
